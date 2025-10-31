@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Halloween English Challenge</title>
+    <!-- Подключение Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Подключение шрифтов: Inter для текста и Creepster для заголовков -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Creepster&family=Inter:wght@400;700&display=swap" rel="stylesheet">
+
+    <!-- Настройка Tailwind для добавления шрифта -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'inter': ['Inter', 'sans-serif'],
+                        'creepster': ['Creepster', 'cursive'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Применяем шрифты */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-image: url("https://placehold.co/1920x1080/0a0a0a/1a1a1a?text=Spooky+Background");
+            background-size: cover;
+            background-attachment: fixed;
+        }
+        h1, h2 {
+            font-family: 'Creepster', cursive;
+        }
+        /* Стили для полей ввода */
+        .task-input {
+            background-color: #374151; /* bg-gray-700 */
+            border: 1px solid #4b5563; /* border-gray-600 */
+            color: #f3f4f6; /* text-gray-100 */
+            border-radius: 0.375rem; /* rounded-md */
+            padding: 0.5rem 0.75rem; /* px-3 py-2 */
+            width: 150px;
+            margin: 0 4px;
+        }
+        .task-input:focus {
+            outline: none;
+            border-color: #f97316; /* border-orange-500 */
+            box-shadow: 0 0 0 2px #f97316;
+        }
+        textarea.task-textarea {
+            background-color: #1f2937; /* bg-gray-800 */
+            border: 1px solid #4b5563; /* border-gray-600 */
+            color: #f3f4f6; /* text-gray-100 */
+            border-radius: 0.5rem; /* rounded-lg */
+            padding: 0.75rem; /* p-3 */
+            width: 100%;
+            min-height: 150px;
+            margin-top: 1rem; /* mt-4 */
+        }
+        textarea.task-textarea:focus {
+            outline: none;
+            border-color: #f97316; /* border-orange-500 */
+            box-shadow: 0 0 0 2px #f97316;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-200 min-h-screen p-4 md:p-8">
+
+    <!-- 
+      ПОЛЬЗОВАТЕЛЬСКИЙ КОММЕНТАРИЙ: 
+      Если вы хотите добавить фоновую музыку (например, с GitHub Pages),
+      вы можете раскомментировать и использовать этот тег <audio>.
+    -->
+    <!-- 
+    <audio autoplay loop>
+      <source src="[ССЫЛКА_НА_ВАШ_MP3_ФАЙЛ_С_GITHUB_PAGES]" type="audio/mpeg">
+      Your browser does not support the audio element.
+    </audio>
+    -->
+
+    <div class="max-w-4xl mx-auto bg-black bg-opacity-70 p-6 md:p-10 rounded-2xl shadow-2xl shadow-orange-500/20 border border-orange-800">
+
+        <!-- Заголовок -->
+        <header class="text-center mb-8">
+            <h1 class="text-6xl md:text-8xl text-orange-500 drop-shadow-lg">Halloween Challenge</h1>
+            <p class="text-xl text-gray-400 mt-2">Spooky English Tasks for Brave 8th Graders</p>
+        </header>
+
+        <!-- Вступление на русском -->
+        <div class="text-center mb-10 p-4 bg-gray-800 rounded-lg border border-gray-700">
+            <p class="text-lg">🎃 Добро пожаловать, ученики 8 класса! 🎃</p>
+            <p class="text-gray-300">В эту жуткую ночь вам предстоит выполнить несколько заданий по английскому языку. Выберите свой уровень сложности... если осмелитесь! Удачи!</p>
+        </div>
+
+        <!-- УРОВЕНЬ 1: The Spooky Apprentice (Помощник Привидения) -->
+        <section class="mb-12 p-6 bg-gray-800 bg-opacity-80 rounded-lg border-2 border-orange-700 shadow-lg">
+            <h2 class="text-4xl text-orange-400 mb-4">Level 1: The Spooky Apprentice 👻</h2>
+            <p class="text-gray-300 mb-6">This level is for those who are just starting their spooky journey. Focus on vocabulary and simple past tense.</p>
+
+            <!-- Задание 1.1: Matching -->
+            <div class="mb-6">
+                <h3 class="text-2xl text-orange-300 mb-3">Task 1: Vocabulary Matching</h3>
+                <p class="mb-4">Match the English word with its meaning. Write the correct letter (A, B, C, D, E) in the box.</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <ul class="list-none space-y-2">
+                            <li>1. Witch <input type="text" class="task-input w-16"></li>
+                            <li>2. Ghost <input type="text" class="task-input w-16"></li>
+                            <li>3. Pumpkin <input type="text" class="task-input w-16"></li>
+                            <li>4. Haunted <input type="text" class="task-input w-16"></li>
+                            <li>5. Costume <input type="text" class="task-input w-16"></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <ul class="list-none space-y-2 bg-gray-700 p-4 rounded-md">
+                            <li>A. A large orange vegetable.</li>
+                            <li>B. A special suit you wear for a party.</li>
+                            <li>C. The spirit of a dead person.</li>
+                            <li>D. A place visited by ghosts.</li>
+                            <li>E. A woman with magic powers.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Задание 1.2: Past Simple Fill-in-the-blanks -->
+            <div>
+                <h3 class="text-2xl text-orange-300 mb-3">Task 2: Past Simple Gaps</h3>
+                <p class="mb-4">Complete the sentences using the Past Simple form of the verbs in brackets.</p>
+                <ol class="list-decimal list-inside space-y-3">
+                    <li>Yesterday, I <input type="text" class="task-input" placeholder="(see)"> a black cat.</li>
+                    <li>We <input type="text" class="task-input" placeholder="(watch)"> a scary movie last night.</li>
+                    <li>The children <input type="text" class="task-input" placeholder="(go)"> trick-or-treating.</li>
+                    <li>My mom <input type="text" class="task-input" placeholder="(make)"> a pumpkin pie.</li>
+                    <li>The ghost <input type="text" class="task-input" placeholder="(fly)"> through the wall.</li>
+                </ol>
+            </div>
+        </section>
+
+        <!-- УРОВЕНЬ 2: The Ghost Hunter (Охотник на Привидений) -->
+        <section class="mb-12 p-6 bg-gray-800 bg-opacity-80 rounded-lg border-2 border-orange-700 shadow-lg">
+            <h2 class="text-4xl text-orange-400 mb-4">Level 2: The Ghost Hunter 🦇</h2>
+            <p class="text-gray-300 mb-6">You are brave! Now, read a story and work with Past Simple and Past Continuous.</p>
+
+            <!-- Задание 2.1: Reading & Gap-fill -->
+            <div class="mb-6">
+                <h3 class="text-2xl text-orange-300 mb-3">Task 1: A Spooky Night</h3>
+                <p class="mb-4">Read the story and fill in the gaps with the correct form (Past Simple or Past Continuous) of the verbs in brackets.</p>
+                <div class="bg-gray-900 p-4 rounded-lg space-y-3 text-lg leading-relaxed">
+                    <p>
+                        It was a dark and stormy night. I <input type="text" class="task-input" placeholder="(walk)"> home from a Halloween party. The wind <input type="text" class="task-input" placeholder="(blow)"> and the trees <input type="text" class="task-input" placeholder="(make)"> eerie sounds.
+                    </p>
+                    <p>
+                        Suddenly, I <input type="text" class="task-input" placeholder="(hear)"> a strange noise behind me. I <input type="text" class="task-input" placeholder="(turn)"> around, but I <input type="text" class="task-input" placeholder="(see)"> nothing. I was scared, so I <input type="text" class="task-input" placeholder="(start)"> to run.
+                    </p>
+                    <p>
+                        While I <input type="text" class="task-input" placeholder="(run)">, I <input type="text" class="task-input" placeholder="(fall)"> over a large pumpkin. I <input type="text" class="task-input" placeholder="(look)"> up and <input type="text" class="task-input" placeholder="(see)"> a tall figure in a black cloak. It <input type="text" class="task-input" placeholder="(stand)"> right in front of me! It slowly <input type="text" class="task-input" placeholder="(lift)"> its arm... and then it <input type="text" class="task-input" placeholder="(say)">, "Hey, you dropped your phone." It was just my friend Tim!
+                    </p>
+                </div>
+            </div>
+            
+            <!-- Задание 2.2: Comprehension Questions -->
+            <div>
+                <h3 class="text-2xl text-orange-300 mb-3">Task 2: Answer the Questions</h3>
+                <p class="mb-4">Answer in complete sentences based on the text.</p>
+                <ol class="list-decimal list-inside space-y-4">
+                    <li>What was the weather like?</li>
+                    <li><input type="text" class="task-input w-full"></li>
+                    <li>What happened while the person was running?</li>
+                    <li><input type="text" class="task-input w-full"></li>
+                    <li>Who was the "tall figure in a black cloak"?</li>
+                    <li><input type="text" class="task-input w-full"></li>
+                </ol>
+            </div>
+        </section>
+
+        <!-- УРОВЕНЬ 3: The Master of Fright (Магистр Ужаса) -->
+        <section class="p-6 bg-gray-800 bg-opacity-80 rounded-lg border-2 border-orange-700 shadow-lg">
+            <h2 class="text-4xl text-orange-400 mb-4">Level 3: The Master of Fright 🕷️</h2>
+            <p class="text-gray-300 mb-6">Only the bravest! Show your mastery by writing your own spooky story.</p>
+
+            <!-- Задание 3.1: Creative Writing -->
+            <div>
+                <h3 class="text-2xl text-orange-300 mb-3">Task: Creative Writing</h3>
+                <p class="mb-4">Write a short horror story (at least 70 words) using the story starter below. </p>
+                <p class="mb-4"><strong>You MUST use:</strong></p>
+                <ul class="list-disc list-inside mb-4 ml-4 text-orange-300">
+                    <li>Both Past Simple and Past Continuous tenses.</li>
+                    <li>At least 4 words from this list: <strong class="text-gray-100">shadow, suddenly, whisper, creepy, terrified</strong>.</li>
+                </ul>
+
+                <div class="bg-gray-900 p-4 rounded-lg italic">
+                    <p><strong>Story Starter:</strong> "The old library was completely silent. I was looking for a book about ancient spells when all the candles suddenly went out..."</p>
+                </div>
+
+                <textarea class="task-textarea" placeholder="Continue the story here..."></textarea>
+            </div>
+        </section>
+
+    </div>
+</body>
+</html>
+
