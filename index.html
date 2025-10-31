@@ -1,207 +1,308 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Halloween English Challenge</title>
-    <!-- Подключение Tailwind CSS -->
+    <title>Eldoria's Haunted Halls</title>
+    <!-- 1. Tailwind CSS для быстрого и адаптивного дизайна -->
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- Подключение шрифтов: Inter для текста и Creepster для заголовков -->
+    <!-- 2. Google Font (Creepster) для "фишки" №1: Хэллоуинский Дизайн -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Creepster&family=Inter:wght@400;700&display=swap" rel="stylesheet">
-
-    <!-- Настройка Tailwind для добавления шрифта -->
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        'inter': ['Inter', 'sans-serif'],
-                        'creepster': ['Creepster', 'cursive'],
-                    }
-                }
-            }
-        }
-    </script>
-
+    <link href="https://fonts.googleapis.com/css2?family=Creepster&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    
+    <!-- 3. Tone.js для "фишки" №2: Звуковой эффект -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
+    
     <style>
-        /* Применяем шрифты */
         body {
             font-family: 'Inter', sans-serif;
-            background-image: url("https://placehold.co/1920x1080/0a0a0a/1a1a1a?text=Spooky+Background");
-            background-size: cover;
-            background-attachment: fixed;
+            background-color: #1a1a1a; /* Очень темный фон */
+            color: #e0e0e0;
         }
-        h1, h2 {
+        .halloween-title {
             font-family: 'Creepster', cursive;
+            color: #ff6600; /* Яркий оранжевый */
+            font-size: 3.5rem;
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 4px #000;
         }
-        /* Стили для полей ввода */
-        .task-input {
-            background-color: #374151; /* bg-gray-700 */
-            border: 1px solid #4b5563; /* border-gray-600 */
-            color: #f3f4f6; /* text-gray-100 */
-            border-radius: 0.375rem; /* rounded-md */
-            padding: 0.5rem 0.75rem; /* px-3 py-2 */
-            width: 150px;
-            margin: 0 4px;
+        .task-box {
+            background-color: #2b2b2b;
+            border: 1px solid #444;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
         }
-        .task-input:focus {
-            outline: none;
-            border-color: #f97316; /* border-orange-500 */
-            box-shadow: 0 0 0 2px #f97316;
+        .spooky-button {
+            font-family: 'Creepster', cursive;
+            background-color: #ff6600;
+            color: #1a1a1a;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 1.2rem;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(255, 102, 0, 0.4);
         }
-        textarea.task-textarea {
-            background-color: #1f2937; /* bg-gray-800 */
-            border: 1px solid #4b5563; /* border-gray-600 */
-            color: #f3f4f6; /* text-gray-100 */
-            border-radius: 0.5rem; /* rounded-lg */
-            padding: 0.75rem; /* p-3 */
+        .spooky-button:hover {
+            background-color: #e65c00;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(255, 102, 0, 0.6);
+        }
+        .ghost-hint-icon {
+            cursor: pointer;
+            font-size: 1.5rem;
+            transition: transform 0.3s ease;
+        }
+        .ghost-hint-icon:hover {
+            transform: scale(1.2) rotate(10deg);
+        }
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
             width: 100%;
-            min-height: 150px;
-            margin-top: 1rem; /* mt-4 */
-        }
-        textarea.task-textarea:focus {
-            outline: none;
-            border-color: #f97316; /* border-orange-500 */
-            box-shadow: 0 0 0 2px #f97316;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 50;
         }
     </style>
 </head>
-<body class="bg-gray-900 text-gray-200 min-h-screen p-4 md:p-8">
+<body class="bg-gray-900 text-gray-200 p-4 md:p-8">
 
-    <!-- 
-      ПОЛЬЗОВАТЕЛЬСКИЙ КОММЕНТАРИЙ: 
-      Если вы хотите добавить фоновую музыку (например, с GitHub Pages),
-      вы можете раскомментировать и использовать этот тег <audio>.
-    -->
-    <!-- 
-    <audio autoplay loop>
-      <source src="[ССЫЛКА_НА_ВАШ_MP3_ФАЙЛ_С_GITHUB_PAGES]" type="audio/mpeg">
-      Your browser does not support the audio element.
-    </audio>
-    -->
-
-    <div class="max-w-4xl mx-auto bg-black bg-opacity-70 p-6 md:p-10 rounded-2xl shadow-2xl shadow-orange-500/20 border border-orange-800">
-
-        <!-- Заголовок -->
+    <div class="max-w-4xl mx-auto">
+        
         <header class="text-center mb-8">
-            <h1 class="text-6xl md:text-8xl text-orange-500 drop-shadow-lg">Halloween Challenge</h1>
-            <p class="text-xl text-gray-400 mt-2">Spooky English Tasks for Brave 8th Graders</p>
+            <h1 class="halloween-title">Eldoria's Haunted Halls</h1>
+            <p class="text-xl text-orange-300">A B1/B2 English Challenge</p>
+            
+            <!-- Фишка №2: Кнопка "Spooky Ambiance" -->
+            <button id="soundButton" class="spooky-button mt-4">🎃 Click for Ambiance 🎃</button>
+            <p id="soundMessage" class="text-sm text-gray-400 mt-2 hidden">(Sound is playing...)</p>
         </header>
 
-        <!-- Вступление на русском -->
-        <div class="text-center mb-10 p-4 bg-gray-800 rounded-lg border border-gray-700">
-            <p class="text-lg">🎃 Добро пожаловать, ученики 8 класса! 🎃</p>
-            <p class="text-gray-300">В эту жуткую ночь вам предстоит выполнить несколько заданий по английскому языку. Выберите свой уровень сложности... если осмелитесь! Удачи!</p>
-        </div>
-
-        <!-- УРОВЕНЬ 1: The Spooky Apprentice (Помощник Привидения) -->
-        <section class="mb-12 p-6 bg-gray-800 bg-opacity-80 rounded-lg border-2 border-orange-700 shadow-lg">
-            <h2 class="text-4xl text-orange-400 mb-4">Level 1: The Spooky Apprentice 👻</h2>
-            <p class="text-gray-300 mb-6">This level is for those who are just starting their spooky journey. Focus on vocabulary and simple past tense.</p>
-
-            <!-- Задание 1.1: Matching -->
-            <div class="mb-6">
-                <h3 class="text-2xl text-orange-300 mb-3">Task 1: Vocabulary Matching</h3>
-                <p class="mb-4">Match the English word with its meaning. Write the correct letter (A, B, C, D, E) in the box.</p>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <ul class="list-none space-y-2">
-                            <li>1. Witch <input type="text" class="task-input w-16"></li>
-                            <li>2. Ghost <input type="text" class="task-input w-16"></li>
-                            <li>3. Pumpkin <input type="text" class="task-input w-16"></li>
-                            <li>4. Haunted <input type="text" class="task-input w-16"></li>
-                            <li>5. Costume <input type="text" class="task-input w-16"></li>
-                        </ul>
-                    </div>
-                    <div>
-                        <ul class="list-none space-y-2 bg-gray-700 p-4 rounded-md">
-                            <li>A. A large orange vegetable.</li>
-                            <li>B. A special suit you wear for a party.</li>
-                            <li>C. The spirit of a dead person.</li>
-                            <li>D. A place visited by ghosts.</li>
-                            <li>E. A woman with magic powers.</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Задание 1.2: Past Simple Fill-in-the-blanks -->
-            <div>
-                <h3 class="text-2xl text-orange-300 mb-3">Task 2: Past Simple Gaps</h3>
-                <p class="mb-4">Complete the sentences using the Past Simple form of the verbs in brackets.</p>
-                <ol class="list-decimal list-inside space-y-3">
-                    <li>Yesterday, I <input type="text" class="task-input" placeholder="(see)"> a black cat.</li>
-                    <li>We <input type="text" class="task-input" placeholder="(watch)"> a scary movie last night.</li>
-                    <li>The children <input type="text" class="task-input" placeholder="(go)"> trick-or-treating.</li>
-                    <li>My mom <input type="text" class="task-input" placeholder="(make)"> a pumpkin pie.</li>
-                    <li>The ghost <input type="text" class="task-input" placeholder="(fly)"> through the wall.</li>
-                </ol>
-            </div>
-        </section>
-
-        <!-- УРОВЕНЬ 2: The Ghost Hunter (Охотник на Привидений) -->
-        <section class="mb-12 p-6 bg-gray-800 bg-opacity-80 rounded-lg border-2 border-orange-700 shadow-lg">
-            <h2 class="text-4xl text-orange-400 mb-4">Level 2: The Ghost Hunter 🦇</h2>
-            <p class="text-gray-300 mb-6">You are brave! Now, read a story and work with Past Simple and Past Continuous.</p>
-
-            <!-- Задание 2.1: Reading & Gap-fill -->
-            <div class="mb-6">
-                <h3 class="text-2xl text-orange-300 mb-3">Task 1: A Spooky Night</h3>
-                <p class="mb-4">Read the story and fill in the gaps with the correct form (Past Simple or Past Continuous) of the verbs in brackets.</p>
-                <div class="bg-gray-900 p-4 rounded-lg space-y-3 text-lg leading-relaxed">
-                    <p>
-                        It was a dark and stormy night. I <input type="text" class="task-input" placeholder="(walk)"> home from a Halloween party. The wind <input type="text" class="task-input" placeholder="(blow)"> and the trees <input type="text" class="task-input" placeholder="(make)"> eerie sounds.
-                    </p>
-                    <p>
-                        Suddenly, I <input type="text" class="task-input" placeholder="(hear)"> a strange noise behind me. I <input type="text" class="task-input" placeholder="(turn)"> around, but I <input type="text" class="task-input" placeholder="(see)"> nothing. I was scared, so I <input type="text" class="task-input" placeholder="(start)"> to run.
-                    </p>
-                    <p>
-                        While I <input type="text" class="task-input" placeholder="(run)">, I <input type="text" class="task-input" placeholder="(fall)"> over a large pumpkin. I <input type="text" class="task-input" placeholder="(look)"> up and <input type="text" class="task-input" placeholder="(see)"> a tall figure in a black cloak. It <input type="text" class="task-input" placeholder="(stand)"> right in front of me! It slowly <input type="text" class="task-input" placeholder="(lift)"> its arm... and then it <input type="text" class="task-input" placeholder="(say)">, "Hey, you dropped your phone." It was just my friend Tim!
-                    </p>
-                </div>
-            </div>
+        <!-- --- PART 1: THE TEXT --- -->
+        <section class="task-box p-6 mb-8">
+            <h2 class="text-2xl font-semibold mb-4 text-orange-400">Task 1: The Story</h2>
+            <p class="mb-4">Read the text about a strange problem at Eldoria University. The target vocabulary is in <strong>bold</strong>.</p>
             
-            <!-- Задание 2.2: Comprehension Questions -->
-            <div>
-                <h3 class="text-2xl text-orange-300 mb-3">Task 2: Answer the Questions</h3>
-                <p class="mb-4">Answer in complete sentences based on the text.</p>
-                <ol class="list-decimal list-inside space-y-4">
-                    <li>What was the weather like?</li>
-                    <li><input type="text" class="task-input w-full"></li>
-                    <li>What happened while the person was running?</li>
-                    <li><input type="text" class="task-input w-full"></li>
-                    <li>Who was the "tall figure in a black cloak"?</li>
-                    <li><input type="text" class="task-input w-full"></li>
-                </ol>
+            <div class="prose prose-invert max-w-none text-gray-300 space-y-4">
+                <p>Eldoria University, famous for its Spectral Studies program, had a problem: student <strong>retention</strong> was at an all-time low. Students were leaving in panic. The cause? Barnaby, the usually <strong>personable</strong> ghost of the library, had suddenly become <strong>combative</strong>.</p>
+                
+                <p>Professor Anya Sharma, a new hire, thought the Dean's plan to just <strong>bypass</strong> the library entirely was a <strong>rash</strong> decision. The Dean, however, felt the new high-tech "Digital Hub" was the <strong>be-all and end-all</strong> of modern education and didn't want to deal with a "moody spirit."</p>
+                
+                <p>Anya decided to investigate. She found Barnaby weeping in the old bell tower. He felt <strong>slighted</strong>. "They're forgetting history!" he wailed. "They think new computers are everything."</p>
+                
+                <p>Anya realized the Dean's focus on technology had made the university's historical guardian feel obsolete. She convinced the Dean that ignoring the "spirit" of the school would be a mistake <strong>in the long run</strong>. The solution? They turned the library into a "Historical Haunts & Digital Hub" center, integrating the old with the new. Barnaby became the official "Spectral Curator," and student retention mysteriously crept back up.</p>
             </div>
         </section>
 
-        <!-- УРОВЕНЬ 3: The Master of Fright (Магистр Ужаса) -->
-        <section class="p-6 bg-gray-800 bg-opacity-80 rounded-lg border-2 border-orange-700 shadow-lg">
-            <h2 class="text-4xl text-orange-400 mb-4">Level 3: The Master of Fright 🕷️</h2>
-            <p class="text-gray-300 mb-6">Only the bravest! Show your mastery by writing your own spooky story.</p>
+        <!-- --- PART 2: VOCABULARY CHECK --- -->
+        <section class="task-box p-6 mb-8">
+            <h2 class="text-2xl font-semibold mb-4 text-orange-400">Task 2: Vocabulary Cauldron</h2>
+            <p class="mb-4">Fill in the gaps with the correct target word from the story. 
+                <!-- Фишка №3: Подсказка от призрака -->
+                <span id="ghostHintButton" class="ghost-hint-icon" title="Click for a hint!">👻</span>
+            </p>
 
-            <!-- Задание 3.1: Creative Writing -->
-            <div>
-                <h3 class="text-2xl text-orange-300 mb-3">Task: Creative Writing</h3>
-                <p class="mb-4">Write a short horror story (at least 70 words) using the story starter below. </p>
-                <p class="mb-4"><strong>You MUST use:</strong></p>
-                <ul class="list-disc list-inside mb-4 ml-4 text-orange-300">
-                    <li>Both Past Simple and Past Continuous tenses.</li>
-                    <li>At least 4 words from this list: <strong class="text-gray-100">shadow, suddenly, whisper, creepy, terrified</strong>.</li>
-                </ul>
-
-                <div class="bg-gray-900 p-4 rounded-lg italic">
-                    <p><strong>Story Starter:</strong> "The old library was completely silent. I was looking for a book about ancient spells when all the candles suddenly went out..."</p>
+            <!-- Фишка №4: Интерактивный квиз с самопроверкой -->
+            <div class="space-y-4">
+                <!-- Question 1 -->
+                <div class="flex flex-col sm:flex-row sm:items-center">
+                    <label for="q1" class="flex-1 mb-2 sm:mb-0">1. The university was worried about student ______, as many were leaving.</label>
+                    <input type="text" id="q1" class="bg-gray-800 border border-gray-600 rounded p-2 sm:w-40" data-answer="retention">
+                    <button onclick="checkAnswer('q1')" class="bg-orange-600 text-white p-2 rounded mt-2 sm:mt-0 sm:ml-2 hover:bg-orange-700">Check</button>
                 </div>
+                <!-- Question 2 -->
+                <div class="flex flex-col sm:flex-row sm:items-center">
+                    <label for="q2" class="flex-1 mb-2 sm:mb-0">2. Barnaby, who was normally friendly and ______, was now scaring people.</label>
+                    <input type="text" id="q2" class="bg-gray-800 border border-gray-600 rounded p-2 sm:w-40" data-answer="personable">
+                    <button onclick="checkAnswer('q2')" class="bg-orange-600 text-white p-2 rounded mt-2 sm:mt-0 sm:ml-2 hover:bg-orange-700">Check</button>
+                </div>
+                <!-- Question 3 -->
+                <div class="flex flex-col sm:flex-row sm:items-center">
+                    <label for="q3" class="flex-1 mb-2 sm:mb-0">3. The Dean made a ______ decision to close the library immediately.</label>
+                    <input type="text" id="q3" class="bg-gray-800 border border-gray-600 rounded p-2 sm:w-40" data-answer="rash">
+                    <button onclick="checkAnswer('q3')" class="bg-orange-600 text-white p-2 rounded mt-2 sm:mt-0 sm:ml-2 hover:bg-orange-700">Check</button>
+                </div>
+                <!-- Question 4 -->
+                <div class="flex flex-col sm:flex-row sm:items-center">
+                    <label for="q4" class="flex-1 mb-2 sm:mb-0">4. The ghost felt ______ because everyone was ignoring him for the new tech.</label>
+                    <input type="text" id="q4" class="bg-gray-800 border border-gray-600 rounded p-2 sm:w-40" data-answer="slighted">
+                    <button onclick="checkAnswer('q4')" class="bg-orange-600 text-white p-2 rounded mt-2 sm:mt-0 sm:ml-2 hover:bg-orange-700">Check</button>
+                </div>
+                <!-- Question 5 -->
+                <div class="flex flex-col sm:flex-row sm:items-center">
+                    <label for="q5" class="flex-1 mb-2 sm:mb-0">5. The angry ghost became ______ and started throwing books.</label>
+                    <input type="text" id="q5" class="bg-gray-800 border border-gray-600 rounded p-2 sm:w-40" data-answer="combative">
+                    <button onclick="checkAnswer('q5')" class="bg-orange-600 text-white p-2 rounded mt-2 sm:mt-0 sm:ml-2 hover:bg-orange-700">Check</button>
+                </div>
+                <!-- Question 6 -->
+                <div class="flex flex-col sm:flex-row sm:items-center">
+                    <label for="q6" class="flex-1 mb-2 sm:mb-0">6. The Dean thought his new Digital Hub was the ______ of education.</label>
+                    <input type="text" id="q6" class="bg-gray-800 border border-gray-600 rounded p-2 sm:w-40" data-answer="be-all and end-all">
+                    <button onclick="checkAnswer('q6')" class="bg-orange-600 text-white p-2 rounded mt-2 sm:mt-0 sm:ml-2 hover:bg-orange-700">Check</button>
+                </div>
+                <!-- Question 7 -->
+                <div class="flex flex-col sm:flex-row sm:items-center">
+                    <label for="q7" class="flex-1 mb-2 sm:mb-0">7. Anya knew that ignoring history would be a mistake ______.</label>
+                    <input type="text" id="q7" class="bg-gray-800 border border-gray-600 rounded p-2 sm:w-40" data-answer="in the long run">
+                    <button onclick="checkAnswer('q7')" class="bg-orange-600 text-white p-2 rounded mt-2 sm:mt-0 sm:ml-2 hover:bg-orange-700">Check</button>
+                </div>
+                <!-- Question 8 -->
+                <div class="flex flex-col sm:flex-row sm:items-center">
+                    <label for="q8" class="flex-1 mb-2 sm:mb-0">8. The Dean's first idea was to ______ the library and build a new wing.</label>
+                    <input type="text" id="q8" class="bg-gray-800 border border-gray-600 rounded p-2 sm:w-40" data-answer="bypass">
+                    <button onclick="checkAnswer('q8')" class="bg-orange-600 text-white p-2 rounded mt-2 sm:mt-0 sm:ml-2 hover:bg-orange-700">Check</button>
+                </div>
+            </div>
+        </section>
 
-                <textarea class="task-textarea" placeholder="Continue the story here..."></textarea>
+        <!-- --- PART 3: CONNECT-EXTEND-CHALLENGE --- -->
+        <section class="task-box p-6 mb-8">
+            <h2 class="text-2xl font-semibold mb-4 text-orange-400">Task 3: Connect, Extend, Challenge</h2>
+            <p class="mb-6">Now, reflect on the story and its themes. Discuss these points with a partner or write down your thoughts.</p>
+            
+            <div class="space-y-6">
+                <div>
+                    <h3 class="text-2xl text-lime-400" style="font-family: 'Creepster', cursive; letter-spacing: 1px;">CONNECT 🧠</h3>
+                    <p>How does this story **connect** to what you already know about education? Have you ever felt that new technology or rules at your school ignored its history or 'spirit'? Describe a time you felt tradition and modernity were in conflict.</p>
+                </div>
+                
+                <div>
+                    <h3 class="text-2xl text-lime-400" style="font-family: 'Creepster', cursive; letter-spacing: 1px;">EXTEND 🚀</h3>
+                    <p>How does this story **extend** your thinking? Do you agree with Anya that respecting history is important for student <strong>retention</strong>, or do you think the Dean was right that modern tech is the <strong>be-all and end-all</strong>? Why?</p>
+                </div>
+                
+                <div>
+                    <h3 class="text-2xl text-lime-400" style="font-family: 'Creepster', cursive; letter-spacing: 1px;">CHALLENGE ❓</h3>
+                    <p>What do you still find **challenging** or confusing? What questions do you still have? (e.g., "Will the Dean truly respect Barnaby <strong>in the long run</strong>, or will he try to <strong>bypass</strong> him again?")</p>
+                    
+                    <!-- Фишка №5: "Отправка" своего вопроса -->
+                    <div class="mt-4">
+                        <textarea id="challengeQuery" class="w-full h-24 bg-gray-800 border border-gray-600 rounded p-3" placeholder="Type your 'Challenge' question here..."></textarea>
+                        <button id="submitChallenge" class="spooky-button mt-2">Send to the Spirits 🦇</button>
+                        <p id="submitMessage" class="text-sm text-lime-300 mt-2 hidden"></p>
+                    </div>
+                </div>
             </div>
         </section>
 
     </div>
+
+    <!-- Модальное окно для "Фишки №3" -->
+    <div id="hintModal" class="modal-overlay hidden">
+        <div class="task-box p-8 rounded-lg max-w-sm w-full relative">
+            <button id="closeHint" class="absolute top-2 right-4 text-2xl text-gray-400 hover:text-white">&times;</button>
+            <h3 class="halloween-title text-4xl text-center mb-4">A Ghostly Hint!</h3>
+            <p class="text-center text-lg">"Pssst... a 'combative' person isn't friendly... they are ready to... <strong class='text-lime-400'>FIGHT!</strong> 👻"</p>
+        </div>
+    </div>
+
+
+    <script>
+        // --- Логика для Фишки №2: Звук ---
+        const soundButton = document.getElementById('soundButton');
+        const soundMessage = document.getElementById('soundMessage');
+        let spookyNoise;
+
+        soundButton.addEventListener('click', async () => {
+            if (!spookyNoise) {
+                await Tone.start();
+                // Создаем "призрачный" звук ветра
+                spookyNoise = new Tone.NoiseSynth({
+                    noise: {
+                        type: 'pink' // 'pink' or 'brown' noise sounds like wind
+                    },
+                    envelope: {
+                        attack: 2,
+                        decay: 1,
+                        sustain: 0.5,
+                        release: 3
+                    }
+                }).toDestination();
+                
+                // Добавляем эффект "воя" (Phaser)
+                const phaser = new Tone.Phaser({
+                    frequency: 0.5,
+                    octaves: 3,
+                    baseFrequency: 350
+                }).toDestination();
+                spookyNoise.connect(phaser);
+            }
+            
+            spookyNoise.triggerAttackRelease("4n");
+            soundMessage.classList.remove('hidden');
+            soundButton.disabled = true;
+
+            setTimeout(() => {
+                soundMessage.classList.add('hidden');
+                soundButton.disabled = false;
+            }, 4000); // Длительность звука
+        });
+
+        // --- Логика для Фишки №3: Подсказка ---
+        const hintButton = document.getElementById('ghostHintButton');
+        const closeHintButton = document.getElementById('closeHint');
+        const hintModal = document.getElementById('hintModal');
+
+        hintButton.addEventListener('click', () => {
+            hintModal.classList.remove('hidden');
+        });
+        closeHintButton.addEventListener('click', () => {
+            hintModal.classList.add('hidden');
+        });
+        hintModal.addEventListener('click', (e) => {
+            if (e.target === hintModal) {
+                hintModal.classList.add('hidden');
+            }
+        });
+
+        // --- Логика для Фишки №4: Квиз ---
+        function checkAnswer(inputId) {
+            const input = document.getElementById(inputId);
+            const userAnswer = input.value.trim().toLowerCase();
+            const correctAnswer = input.dataset.answer.toLowerCase();
+
+            if (userAnswer === correctAnswer) {
+                input.style.borderColor = '#4ade80'; // Зеленый (lime-400)
+                input.style.backgroundColor = '#1c3d2a';
+            } else {
+                input.style.borderColor = '#f87171'; // Красный (red-400)
+                input.style.backgroundColor = '#451a1a';
+            }
+        }
+
+        // --- Логика для Фишки №5: Отправка ---
+        const submitChallengeButton = document.getElementById('submitChallenge');
+        const submitMessage = document.getElementById('submitMessage');
+        const challengeQuery = document.getElementById('challengeQuery');
+
+        submitChallengeButton.addEventListener('click', () => {
+            if (challengeQuery.value.trim() === "") {
+                submitMessage.textContent = "The spirits can't hear you... speak up!";
+                submitMessage.classList.remove('hidden');
+                submitMessage.classList.remove('text-lime-300');
+                submitMessage.classList.add('text-red-400');
+            } else {
+                submitMessage.textContent = "The spirits are pondering your question... 🦇";
+                submitMessage.classList.remove('hidden');
+                submitMessage.classList.remove('text-red-400');
+                submitMessage.classList.add('text-lime-300');
+                submitChallengeButton.disabled = true;
+                challengeQuery.disabled = true;
+            }
+        });
+
+    </script>
+
 </body>
 </html>
+
