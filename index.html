@@ -1,308 +1,422 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Eldoria's Haunted Halls</title>
-    <!-- 1. Tailwind CSS для быстрого и адаптивного дизайна -->
+    <title>Судебное Дело: Руководитель Образования</title>
+    <!-- Подключение Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- 2. Google Font (Creepster) для "фишки" №1: Хэллоуинский Дизайн -->
+    <!-- Подключение шрифтов -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Creepster&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Merriweather:wght@400;700;900&display=swap" rel="stylesheet">
     
-    <!-- 3. Tone.js для "фишки" №2: Звуковой эффект -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
-    
+    <script>
+        // Конфигурация Tailwind
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Merriweather', 'serif'],
+                    },
+                    colors: {
+                        'brand-parchment': '#fdfbf6',
+                        'brand-seal': '#a41e21', // Глубокий красный
+                        'brand-ink': '#2a2a2a', // Темно-серый
+                    }
+                }
+            }
+        }
+    </script>
     <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #1a1a1a; /* Очень темный фон */
-            color: #e0e0e0;
+        /* "Восковая" печать */
+        .seal-effect {
+            position: relative;
+            display: inline-block;
         }
-        .halloween-title {
-            font-family: 'Creepster', cursive;
-            color: #ff6600; /* Яркий оранжевый */
-            font-size: 3.5rem;
-            letter-spacing: 2px;
-            text-shadow: 2px 2px 4px #000;
+        .seal-effect::after {
+            content: '';
+            position: absolute;
+            left: -10px;
+            top: -5px;
+            width: 30px;
+            height: 30px;
+            background-color: #a41e21; /* brand-seal */
+            border-radius: 50%;
+            z-index: -1;
+            opacity: 0.8;
+            filter: blur(2px);
         }
-        .task-box {
-            background-color: #2b2b2b;
-            border: 1px solid #444;
-            border-radius: 12px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+
+        /* Водяной знак "Конфиденциально" для страниц этапов */
+        .stage-page-container {
+            position: relative;
+            overflow: hidden; /* Чтобы водяной знак не вылезал */
         }
-        .spooky-button {
-            font-family: 'Creepster', cursive;
-            background-color: #ff6600;
-            color: #1a1a1a;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 8px;
-            font-size: 1.2rem;
-            letter-spacing: 1px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 5px rgba(255, 102, 0, 0.4);
+        
+        .confidential-watermark {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-30deg);
+            font-size: 6rem; /* 96px */
+            font-weight: 900;
+            color: #ef4444; /* red-500 */
+            opacity: 0.1;
+            z-index: 0;
+            pointer-events: none;
+            font-family: 'Merriweather', serif;
+            text-transform: uppercase;
+            letter-spacing: 0.5em;
         }
-        .spooky-button:hover {
-            background-color: #e65c00;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(255, 102, 0, 0.6);
-        }
-        .ghost-hint-icon {
-            cursor: pointer;
-            font-size: 1.5rem;
-            transition: transform 0.3s ease;
-        }
-        .ghost-hint-icon:hover {
-            transform: scale(1.2) rotate(10deg);
-        }
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(5px);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 50;
+
+        /* Контент на странице этапа должен быть поверх водяного знака */
+        .stage-content {
+            position: relative;
+            z-index: 1;
         }
     </style>
 </head>
-<body class="bg-gray-900 text-gray-200 p-4 md:p-8">
+<body class="bg-stone-200 font-sans text-brand-ink p-4 md:p-8">
 
-    <div class="max-w-4xl mx-auto">
+    <!-- Главный контейнер, стилизованный под "Папку дела" -->
+    <main class="max-w-6xl mx-auto bg-brand-parchment shadow-2xl rounded-lg border-8 border-gray-800 min-h-screen">
         
-        <header class="text-center mb-8">
-            <h1 class="halloween-title">Eldoria's Haunted Halls</h1>
-            <p class="text-xl text-orange-300">A B1/B2 English Challenge</p>
+        <!-- === ГЛАВНАЯ СТРАНИЦА (ОБЛОЖКА ДЕЛА) === -->
+        <div id="main-docket">
             
-            <!-- Фишка №2: Кнопка "Spooky Ambiance" -->
-            <button id="soundButton" class="spooky-button mt-4">🎃 Click for Ambiance 🎃</button>
-            <p id="soundMessage" class="text-sm text-gray-400 mt-2 hidden">(Sound is playing...)</p>
-        </header>
+            <!-- === ЗАГОЛОВОК ДЕЛА === -->
+            <header class="text-center p-8 md:p-12 border-b-4 border-gray-800 border-dashed">
+                
+                <!-- Смайлик "Весы правосудия" -->
+                <div class="text-8xl mx-auto mb-6 opacity-80" aria-label="Весы правосудия">⚖️</div>
 
-        <!-- --- PART 1: THE TEXT --- -->
-        <section class="task-box p-6 mb-8">
-            <h2 class="text-2xl font-semibold mb-4 text-orange-400">Task 1: The Story</h2>
-            <p class="mb-4">Read the text about a strange problem at Eldoria University. The target vocabulary is in <strong>bold</strong>.</p>
-            
-            <div class="prose prose-invert max-w-none text-gray-300 space-y-4">
-                <p>Eldoria University, famous for its Spectral Studies program, had a problem: student <strong>retention</strong> was at an all-time low. Students were leaving in panic. The cause? Barnaby, the usually <strong>personable</strong> ghost of the library, had suddenly become <strong>combative</strong>.</p>
-                
-                <p>Professor Anya Sharma, a new hire, thought the Dean's plan to just <strong>bypass</strong> the library entirely was a <strong>rash</strong> decision. The Dean, however, felt the new high-tech "Digital Hub" was the <strong>be-all and end-all</strong> of modern education and didn't want to deal with a "moody spirit."</p>
-                
-                <p>Anya decided to investigate. She found Barnaby weeping in the old bell tower. He felt <strong>slighted</strong>. "They're forgetting history!" he wailed. "They think new computers are everything."</p>
-                
-                <p>Anya realized the Dean's focus on technology had made the university's historical guardian feel obsolete. She convinced the Dean that ignoring the "spirit" of the school would be a mistake <strong>in the long run</strong>. The solution? They turned the library into a "Historical Haunts & Digital Hub" center, integrating the old with the new. Barnaby became the official "Spectral Curator," and student retention mysteriously crept back up.</p>
-            </div>
-        </section>
+                <h1 class="font-serif text-4xl md:text-6xl font-bold text-brand-ink uppercase">
+                    Судебное Дело <span class="text-brand-seal">№ 2030-ED</span>
+                </h1>
+                <p class="font-serif text-xl md:text-3xl text-gray-700 mt-3">
+                    Относительно: "Руководитель частной образовательной организации"
+                </p>
+            </header>
 
-        <!-- --- PART 2: VOCABULARY CHECK --- -->
-        <section class="task-box p-6 mb-8">
-            <h2 class="text-2xl font-semibold mb-4 text-orange-400">Task 2: Vocabulary Cauldron</h2>
-            <p class="mb-4">Fill in the gaps with the correct target word from the story. 
-                <!-- Фишка №3: Подсказка от призрака -->
-                <span id="ghostHintButton" class="ghost-hint-icon" title="Click for a hint!">👻</span>
-            </p>
-
-            <!-- Фишка №4: Интерактивный квиз с самопроверкой -->
-            <div class="space-y-4">
-                <!-- Question 1 -->
-                <div class="flex flex-col sm:flex-row sm:items-center">
-                    <label for="q1" class="flex-1 mb-2 sm:mb-0">1. The university was worried about student ______, as many were leaving.</label>
-                    <input type="text" id="q1" class="bg-gray-800 border border-gray-600 rounded p-2 sm:w-40" data-answer="retention">
-                    <button onclick="checkAnswer('q1')" class="bg-orange-600 text-white p-2 rounded mt-2 sm:mt-0 sm:ml-2 hover:bg-orange-700">Check</button>
-                </div>
-                <!-- Question 2 -->
-                <div class="flex flex-col sm:flex-row sm:items-center">
-                    <label for="q2" class="flex-1 mb-2 sm:mb-0">2. Barnaby, who was normally friendly and ______, was now scaring people.</label>
-                    <input type="text" id="q2" class="bg-gray-800 border border-gray-600 rounded p-2 sm:w-40" data-answer="personable">
-                    <button onclick="checkAnswer('q2')" class="bg-orange-600 text-white p-2 rounded mt-2 sm:mt-0 sm:ml-2 hover:bg-orange-700">Check</button>
-                </div>
-                <!-- Question 3 -->
-                <div class="flex flex-col sm:flex-row sm:items-center">
-                    <label for="q3" class="flex-1 mb-2 sm:mb-0">3. The Dean made a ______ decision to close the library immediately.</label>
-                    <input type="text" id="q3" class="bg-gray-800 border border-gray-600 rounded p-2 sm:w-40" data-answer="rash">
-                    <button onclick="checkAnswer('q3')" class="bg-orange-600 text-white p-2 rounded mt-2 sm:mt-0 sm:ml-2 hover:bg-orange-700">Check</button>
-                </div>
-                <!-- Question 4 -->
-                <div class="flex flex-col sm:flex-row sm:items-center">
-                    <label for="q4" class="flex-1 mb-2 sm:mb-0">4. The ghost felt ______ because everyone was ignoring him for the new tech.</label>
-                    <input type="text" id="q4" class="bg-gray-800 border border-gray-600 rounded p-2 sm:w-40" data-answer="slighted">
-                    <button onclick="checkAnswer('q4')" class="bg-orange-600 text-white p-2 rounded mt-2 sm:mt-0 sm:ml-2 hover:bg-orange-700">Check</button>
-                </div>
-                <!-- Question 5 -->
-                <div class="flex flex-col sm:flex-row sm:items-center">
-                    <label for="q5" class="flex-1 mb-2 sm:mb-0">5. The angry ghost became ______ and started throwing books.</label>
-                    <input type="text" id="q5" class="bg-gray-800 border border-gray-600 rounded p-2 sm:w-40" data-answer="combative">
-                    <button onclick="checkAnswer('q5')" class="bg-orange-600 text-white p-2 rounded mt-2 sm:mt-0 sm:ml-2 hover:bg-orange-700">Check</button>
-                </div>
-                <!-- Question 6 -->
-                <div class="flex flex-col sm:flex-row sm:items-center">
-                    <label for="q6" class="flex-1 mb-2 sm:mb-0">6. The Dean thought his new Digital Hub was the ______ of education.</label>
-                    <input type="text" id="q6" class="bg-gray-800 border border-gray-600 rounded p-2 sm:w-40" data-answer="be-all and end-all">
-                    <button onclick="checkAnswer('q6')" class="bg-orange-600 text-white p-2 rounded mt-2 sm:mt-0 sm:ml-2 hover:bg-orange-700">Check</button>
-                </div>
-                <!-- Question 7 -->
-                <div class="flex flex-col sm:flex-row sm:items-center">
-                    <label for="q7" class="flex-1 mb-2 sm:mb-0">7. Anya knew that ignoring history would be a mistake ______.</label>
-                    <input type="text" id="q7" class="bg-gray-800 border border-gray-600 rounded p-2 sm:w-40" data-answer="in the long run">
-                    <button onclick="checkAnswer('q7')" class="bg-orange-600 text-white p-2 rounded mt-2 sm:mt-0 sm:ml-2 hover:bg-orange-700">Check</button>
-                </div>
-                <!-- Question 8 -->
-                <div class="flex flex-col sm:flex-row sm:items-center">
-                    <label for="q8" class="flex-1 mb-2 sm:mb-0">8. The Dean's first idea was to ______ the library and build a new wing.</label>
-                    <input type="text" id="q8" class="bg-gray-800 border border-gray-600 rounded p-2 sm:w-40" data-answer="bypass">
-                    <button onclick="checkAnswer('q8')" class="bg-orange-600 text-white p-2 rounded mt-2 sm:mt-0 sm:ml-2 hover:bg-orange-700">Check</button>
-                </div>
-            </div>
-        </section>
-
-        <!-- --- PART 3: CONNECT-EXTEND-CHALLENGE --- -->
-        <section class="task-box p-6 mb-8">
-            <h2 class="text-2xl font-semibold mb-4 text-orange-400">Task 3: Connect, Extend, Challenge</h2>
-            <p class="mb-6">Now, reflect on the story and its themes. Discuss these points with a partner or write down your thoughts.</p>
-            
-            <div class="space-y-6">
-                <div>
-                    <h3 class="text-2xl text-lime-400" style="font-family: 'Creepster', cursive; letter-spacing: 1px;">CONNECT 🧠</h3>
-                    <p>How does this story **connect** to what you already know about education? Have you ever felt that new technology or rules at your school ignored its history or 'spirit'? Describe a time you felt tradition and modernity were in conflict.</p>
-                </div>
+            <!-- === МАТЕРИАЛЫ ДЕЛА (СПИСОК ЭТАПОВ) === -->
+            <section class="p-8 md:p-12">
+                <h2 class="font-serif text-3xl md:text-4xl font-bold text-center mb-10">
+                    <span class="seal-effect">М</span>атериалы Дела
+                </h2>
                 
-                <div>
-                    <h3 class="text-2xl text-lime-400" style="font-family: 'Creepster', cursive; letter-spacing: 1px;">EXTEND 🚀</h3>
-                    <p>How does this story **extend** your thinking? Do you agree with Anya that respecting history is important for student <strong>retention</strong>, or do you think the Dean was right that modern tech is the <strong>be-all and end-all</strong>? Why?</p>
-                </div>
-                
-                <div>
-                    <h3 class="text-2xl text-lime-400" style="font-family: 'Creepster', cursive; letter-spacing: 1px;">CHALLENGE ❓</h3>
-                    <p>What do you still find **challenging** or confusing? What questions do you still have? (e.g., "Will the Dean truly respect Barnaby <strong>in the long run</strong>, or will he try to <strong>bypass</strong> him again?")</p>
+                <!-- Сетка кликабельных этапов -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     
-                    <!-- Фишка №5: "Отправка" своего вопроса -->
-                    <div class="mt-4">
-                        <textarea id="challengeQuery" class="w-full h-24 bg-gray-800 border border-gray-600 rounded p-3" placeholder="Type your 'Challenge' question here..."></textarea>
-                        <button id="submitChallenge" class="spooky-button mt-2">Send to the Spirits 🦇</button>
-                        <p id="submitMessage" class="text-sm text-lime-300 mt-2 hidden"></p>
+                    <!-- Этап 1 -->
+                    <div onclick="showStage('stage1')" class="bg-white p-6 rounded-lg shadow-lg border-2 border-gray-300 hover:shadow-xl hover:border-brand-seal transition-all duration-300 cursor-pointer h-full flex flex-col justify-between">
+                        <h3 class="font-serif text-2xl font-bold text-brand-seal mb-3">▎Этап 1:</h3>
+                        <p class="text-lg font-semibold text-brand-ink">Завершение бакалавриата</p>
+                        <span class="text-sm text-gray-500 mt-4">Нажмите, чтобы открыть материалы...</span>
+                    </div>
+
+                    <!-- Этап 2 -->
+                    <div onclick="showStage('stage2')" class="bg-white p-6 rounded-lg shadow-lg border-2 border-gray-300 hover:shadow-xl hover:border-brand-seal transition-all duration-300 cursor-pointer h-full flex flex-col justify-between">
+                        <h3 class="font-serif text-2xl font-bold text-brand-seal mb-3">▎Этап 2:</h3>
+                        <p class="text-lg font-semibold text-brand-ink">Поступление в магистратуру</p>
+                        <span class="text-sm text-gray-500 mt-4">Нажмите, чтобы открыть материалы...</span>
+                    </div>
+
+                    <!-- Этап 3 -->
+                    <div onclick="showStage('stage3')" class="bg-white p-6 rounded-lg shadow-lg border-2 border-gray-300 hover:shadow-xl hover:border-brand-seal transition-all duration-300 cursor-pointer h-full flex flex-col justify-between">
+                        <h3 class="font-serif text-2xl font-bold text-brand-seal mb-3">▎Этап 3:</h3>
+                        <p class="text-lg font-semibold text-brand-ink">Обучение в магистратуре</p>
+                        <span class="text-sm text-gray-500 mt-4">Нажмите, чтобы открыть материалы...</span>
+                    </div>
+
+                    <!-- Этап 4 -->
+                    <div onclick="showStage('stage4')" class="bg-white p-6 rounded-lg shadow-lg border-2 border-gray-300 hover:shadow-xl hover:border-brand-seal transition-all duration-300 cursor-pointer h-full flex flex-col justify-between">
+                        <h3 class="font-serif text-2xl font-bold text-brand-seal mb-3">▎Этап 4:</h3>
+                        <p class="text-lg font-semibold text-brand-ink">Практика и опыт работы</p>
+                        <span class="text-sm text-gray-500 mt-4">Нажмите, чтобы открыть материалы...</span>
+                    </div>
+
+                    <!-- Этап 5 -->
+                    <div onclick="showStage('stage5')" class="bg-white p-6 rounded-lg shadow-lg border-2 border-gray-300 hover:shadow-xl hover:border-brand-seal transition-all duration-300 cursor-pointer h-full flex flex-col justify-between">
+                        <h3 class="font-serif text-2xl font-bold text-brand-seal mb-3">▎Этап 5:</h3>
+                        <p class="text-lg font-semibold text-brand-ink">Разработка концепции частной школы</p>
+                        <span class="text-sm text-gray-500 mt-4">Нажмите, чтобы открыть материалы...</span>
+                    </div>
+
+                    <!-- Этап 6 -->
+                    <div onclick="showStage('stage6')" class="bg-white p-6 rounded-lg shadow-lg border-2 border-gray-300 hover:shadow-xl hover:border-brand-seal transition-all duration-300 cursor-pointer h-full flex flex-col justify-between">
+                        <h3 class="font-serif text-2xl font-bold text-brand-seal mb-3">▎Этап 6:</h3>
+                        <p class="text-lg font-semibold text-brand-ink">Открытие частной школы</p>
+                        <span class="text-sm text-gray-500 mt-4">Нажмите, чтобы открыть материалы...</span>
                     </div>
                 </div>
-            </div>
-        </section>
+            </section>
 
-    </div>
+            <!-- === ДОПОЛНИТЕЛЬНЫЕ ВАРИАНТЫ ОБУЧЕНИЯ (Остаются на главной) === -->
+            <section class="p-8 md:p-12 bg-gray-800 text-white mt-8">
+                <h2 class="font-serif text-3xl md:text-4xl font-bold text-center mb-8 text-white">
+                    ▎Дополнительные варианты обучения
+                </h2>
+                <div class="max-w-3xl mx-auto space-y-4">
+                    <details class="bg-gray-700 p-4 rounded-lg block">
+                        <summary class="font-serif font-bold text-lg cursor-pointer">1. Курсы по предпринимательству</summary>
+                        <p class="mt-3 text-gray-300 pl-6">Онлайн-курсы на платформах Coursera, Udemy или специализированные курсы в бизнес-школах.</p>
+                    </details>
+                    <details class="bg-gray-700 p-4 rounded-lg block">
+                        <summary class="font-serif font-bold text-lg cursor-pointer">2. Сертификаты по управлению образованием</summary>
+                        <p class="mt-3 text-gray-300 pl-6">Программы повышения квалификации от университетов или профессиональных ассоциаций.</p>
+                    </details>
+                    <details class="bg-gray-700 p-4 rounded-lg block">
+                        <summary class="font-serif font-bold text-lg cursor-pointer">3. Обучение по психологии</summary>
+                        <p class="mt-3 text-gray-300 pl-6">Курсы по детской психологии или образовательной психологии для более глубокого понимания потребностей учащихся.</p>
+                    </details>
+                </div>
+            </section>
 
-    <!-- Модальное окно для "Фишки №3" -->
-    <div id="hintModal" class="modal-overlay hidden">
-        <div class="task-box p-8 rounded-lg max-w-sm w-full relative">
-            <button id="closeHint" class="absolute top-2 right-4 text-2xl text-gray-400 hover:text-white">&times;</button>
-            <h3 class="halloween-title text-4xl text-center mb-4">A Ghostly Hint!</h3>
-            <p class="text-center text-lg">"Pssst... a 'combative' person isn't friendly... they are ready to... <strong class='text-lime-400'>FIGHT!</strong> 👻"</p>
-        </div>
-    </div>
+            <!-- === ПРОТОКОЛ КАРЬЕРНОГО РОСТА (Остается на главной) === -->
+            <section class="p-8 md:p-12 bg-white mt-8">
+                <h2 class="font-serif text-3xl md:text-4xl font-bold text-center mb-12">
+                    <span class="seal-effect">П</span>ротокол Карьерного Роста
+                </h2>
+                <div class="relative max-w-2xl mx-auto border-l-4 border-brand-seal pl-10 py-4">
+                    <!-- Записи... -->
+                    <div class="relative mb-10">
+                        <div class="absolute -left-[50px] top-1 w-6 h-6 bg-brand-ink rounded-full border-4 border-white shadow-md"></div>
+                        <h4 class="font-serif text-2xl font-bold">2026:</h4>
+                        <p class="text-lg text-gray-700">Завершение бакалавриата</p>
+                    </div>
+                    <div class="relative mb-10">
+                        <div class="absolute -left-[50px] top-1 w-6 h-6 bg-brand-ink rounded-full border-4 border-white shadow-md"></div>
+                        <h4 class="font-serif text-2xl font-bold">2026-2028:</h4>
+                        <p class="text-lg text-gray-700">Магистратура</p>
+                    </div>
+                    <div class="relative mb-10">
+                        <div class="absolute -left-[50px] top-1 w-6 h-6 bg-brand-ink rounded-full border-4 border-white shadow-md"></div>
+                        <h4 class="font-serif text-2xl font-bold">2028-2029:</h4>
+                        <p class="text-lg text-gray-700">Работа в школе (администратор)</p>
+                    </div>
+                    <div class="relative mb-10">
+                        <div class="absolute -left-[50px] top-1 w-6 h-6 bg-brand-ink rounded-full border-4 border-white shadow-md"></div>
+                        <h4 class="font-serif text-2xl font-bold">2028-2029:</h4>
+                        <p class="text-lg text-gray-700">Разработка концепции школы</p>
+                    </div>
+                    <div class="relative mb-10">
+                        <div class="absolute -left-[50px] top-1 w-6 h-6 bg-brand-ink rounded-full border-4 border-white shadow-md"></div>
+                        <h4 class="font-serif text-2xl font-bold">2029-2030:</h4>
+                        <p class="text-lg text-gray-700">Открытие частной школы</p>
+                    </div>
+                </div>
+            </section>
 
-
-    <script>
-        // --- Логика для Фишки №2: Звук ---
-        const soundButton = document.getElementById('soundButton');
-        const soundMessage = document.getElementById('soundMessage');
-        let spookyNoise;
-
-        soundButton.addEventListener('click', async () => {
-            if (!spookyNoise) {
-                await Tone.start();
-                // Создаем "призрачный" звук ветра
-                spookyNoise = new Tone.NoiseSynth({
-                    noise: {
-                        type: 'pink' // 'pink' or 'brown' noise sounds like wind
-                    },
-                    envelope: {
-                        attack: 2,
-                        decay: 1,
-                        sustain: 0.5,
-                        release: 3
-                    }
-                }).toDestination();
+            <!-- === ВЕРДИКТ (Остается на главной) === -->
+            <footer class="p-10 md:p-16 text-center border-t-4 border-gray-800 border-dashed mt-8 rounded-b-lg">
                 
-                // Добавляем эффект "воя" (Phaser)
-                const phaser = new Tone.Phaser({
-                    frequency: 0.5,
-                    octaves: 3,
-                    baseFrequency: 350
-                }).toDestination();
-                spookyNoise.connect(phaser);
+                <!-- Смайлик "Судья" (с молотком) -->
+                <div class="text-8xl mx-auto mb-6 opacity-80" aria-label="Судья">🧑‍⚖️</div>
+
+                <h2 class="font-serif text-4xl font-bold text-brand-ink">ВЕРДИКТ</h2>
+                
+                <!-- *** ИСПРАВЛЕНИЕ ЗДЕСЬ *** -->
+                <!-- Вот текст, который вы просили вернуть -->
+                <p class="font-serif text-xl text-gray-700 mt-4 max-w-2xl mx-auto">
+                    На основании представленных доказательств и выполненных процедур,
+                    карьерный путь признается...
+                </p>
+                
+                <p class="font-serif text-5xl font-bold text-brand-seal mt-6 tracking-wider">
+                    УТВЕРЖДЕННЫМ
+                </p>
+                
+                <!-- И нижняя строка, которая тоже пропала -->
+                <p class="mt-8 text-gray-500">&copy; 2025 Высшая Судебная Палата Карьерного Планирования. Дело закрыто.</p>
+
+            </footer>
+        </div>
+        <!-- === КОНЕЦ ГЛАВНОЙ СТРАНИЦЫ === -->
+
+
+        
+        <!-- === КОНТЕЙНЕР ДЛЯ СТРАНИЦ ЭТАПОВ (Скрыт по умолчанию) === -->
+        <div id="stage-details-container" class="hidden">
+            
+            <!-- Навигация "Назад" -->
+            <div class="p-6 bg-gray-800 border-b-4 border-gray-900 sticky top-0 z-20">
+                <button onclick="showMainDocket()" class="bg-white text-brand-ink font-bold py-2 px-6 rounded-lg hover:bg-stone-200 transition-colors duration-200 shadow-lg">
+                    &larr; Вернуться к Материалам Дела
+                </button>
+            </div>
+
+            <!-- 
+              Ниже идут "страницы" для каждого этапа.
+              Они все имеют класс .stage-page и .hidden
+              JavaScript будет показывать нужную.
+            -->
+
+            <!-- СТРАНИЦА ЭТАПА 1 -->
+            <div id="stage1" class="stage-page-container stage-page hidden p-8 md:p-12">
+                <div class="confidential-watermark">Этап 1</div>
+                <div class="stage-content max-w-3xl mx-auto">
+                    <h2 class="font-serif text-4xl font-bold text-brand-seal mb-8">▎Этап 1: Завершение бакалавриата</h2>
+                    
+                    <p class="font-bold text-xl text-brand-ink mt-6 mb-3">• Действия:</p>
+                    <p class="pl-6 text-lg text-gray-700">– Успешно завершить бакалавриат по педагогике.</p>
+                    <p class="pl-6 text-lg text-gray-700">– Участвовать в дополнительных мероприятиях, таких как стажировки в учебных заведениях, волонтерство или работа в образовательных проектах.</p>
+
+                    <p class="font-bold text-xl text-brand-ink mt-8 mb-3">• Ресурсы:</p>
+                    <p class="pl-6 text-lg text-gray-700">– Школы для стажировок.</p>
+                    <p class="pl-6 text-lg text-gray-700">– Профессиональные сообщества.</p>
+                </div>
+            </div>
+            
+            <!-- СТРАНИЦА ЭТАПА 2 -->
+            <div id="stage2" class="stage-page-container stage-page hidden p-8 md:p-12">
+                <div class="confidential-watermark">Этап 2</div>
+                <div class="stage-content max-w-3xl mx-auto">
+                    <h2 class="font-serif text-4xl font-bold text-brand-seal mb-8">▎Этап 2: Поступление в магистратуру</h2>
+                    
+                    <p class="font-bold text-xl text-brand-ink mt-6 mb-3">• Действия:</p>
+                    <p class="pl-6 text-lg text-gray-700">– Выбор магистратуры с фокусом на образовательное управление, педагогическую психологию или управление образовательными учреждениями.</p>
+                    <p class="pl-6 text-lg text-gray-700">– Подготовка к вступительным экзаменам (если необходимо) и подача документов.</p>
+                    
+                    <p class="font-bold text-xl text-brand-ink mt-8 mb-3">• Ресурсы:</p>
+                    <p class="pl-6 text-lg text-gray-700">– ВУЗы, предлагающие магистерские программы (например, МГПУ, МПГУ, МИРЭА и т.д).</p>
+                    <p class="pl-6 text-lg text-gray-700">– Курсы подготовки к экзаменам (если это требуется).</p>
+                </div>
+            </div>
+
+            <!-- СТРАНИЦА ЭТАПА 3 -->
+            <div id="stage3" class="stage-page-container stage-page hidden p-8 md:p-12">
+                <div class="confidential-watermark">Этап 3</div>
+                <div class="stage-content max-w-3xl mx-auto">
+                    <h2 class="font-serif text-4xl font-bold text-brand-seal mb-8">▎Этап 3: Обучение в магистратуре</h2>
+                    
+                    <p class="font-bold text-xl text-brand-ink mt-6 mb-3">• Действия:</p>
+                    <p class="pl-6 text-lg text-gray-700">– Изучение курсов по управлению, финансам, педагогике и правовым аспектам образования.</p>
+                    <p class="pl-6 text-lg text-gray-700">– Участие в проектах и стажировках в образовательных учреждениях.</p>
+                    <p class="pl-6 text-lg text-gray-700">– Налаживание контактов с профессионалами в области образования.</p>
+                    
+                    <p class="font-bold text-xl text-brand-ink mt-8 mb-3">• Ресурсы:</p>
+                    <p class="pl-6 text-lg text-gray-700">– Лекции и семинары от профессионалов.</p>
+                    <p class="pl-6 text-lg text-gray-700">– Вебинары и конференции по образовательному менеджменту.</p>
+                </div>
+            </div>
+            
+            <!-- СТРАНИЦА ЭТАПА 4 -->
+            <div id="stage4" class="stage-page-container stage-page hidden p-8 md:p-12">
+                <div class="confidential-watermark">Этап 4</div>
+                <div class="stage-content max-w-3xl mx-auto">
+                    <h2 class="font-serif text-4xl font-bold text-brand-seal mb-8">▎Этап 4: Практика и опыт работы</h2>
+                    
+                    <p class="font-bold text-xl text-brand-ink mt-6 mb-3">• Действия:</p>
+                    <p class="pl-6 text-lg text-gray-700">– Поиск работы в качестве администратора или заместителя директора в школе или другом образовательном учреждении.</p>
+                    <p class="pl-6 text-lg text-gray-700">– Получение опыта в управлении командой и организации учебного процесса.</p>
+                    
+                    <p class="font-bold text-xl text-brand-ink mt-8 mb-3">• Ресурсы:</p>
+                    <p class="pl-6 text-lg text-gray-700">– Профессиональные ассоциации (например, Ассоциация частных школ).</p>
+                    <p class="pl-6 text-lg text-gray-700">– Менторство от опытных руководителей образовательных учреждений.</p>
+                </div>
+            </div>
+
+            <!-- СТРАНИЦА ЭТАПА 5 -->
+            <div id="stage5" class="stage-page-container stage-page hidden p-8 md:p-12">
+                <div class="confidential-watermark">Этап 5</div>
+                <div class="stage-content max-w-3xl mx-auto">
+                    <h2 class="font-serif text-4xl font-bold text-brand-seal mb-8">▎Этап 5: Разработка концепции частной школы</h2>
+                    
+                    <!-- 
+                      Пользовательский комментарий: 
+                      Вставьте сюда URL-адрес изображения, например, "Чертеж" или "Бизнес-план".
+                      (Например, с GitHub Pages)
+                    -->
+                    <img src="https://placehold.co/600x300/e2e8f0/64748b?text=%D0%A7%D0%B5%D1%80%D1%82%D0%B5%D0%B6%0A%D0%9A%D0%BE%D0%BD%D1%86%D0%B5%D0%BF%D1%86%D0%B8%D0%B8" 
+                         alt="Разработка концепции" 
+                         class="w-full h-auto max-h-80 object-cover rounded-md my-6 shadow-lg"
+                         onerror="this.src='https://placehold.co/600x300/e2e8f0/64748b?text=%D0%98%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D0%B5%0A%D0%BD%D0%B5%D0%B4%D0%BE%D1%81%D1%82%D1%83%D0%BF%D0%BD%D0%BE';">
+
+                    <p class="font-bold text-xl text-brand-ink mt-6 mb-3">• Действия:</p>
+                    <p class="pl-6 text-lg text-gray-700">– Исследование рынка и потребностей родителей/учеников.</p>
+                    <p class="pl-6 text-lg text-gray-700">– Разработка концепции и бизнес-плана для своей школы.</p>
+                    <p class="pl-6 text-lg text-gray-700">– Поиск инвесторов или источников финансирования.</p>
+                    
+                    <p class="font-bold text-xl text-brand-ink mt-8 mb-3">• Ресурсы:</p>
+                    <p class="pl-6 text-lg text-gray-700">– Курсы по предпринимательству и управлению проектами.</p>
+                    <p class="pl-6 text-lg text-gray-700">– Консультации с экспертами в области образования и бизнеса.</p>
+                </div>
+            </div>
+
+            <!-- СТРАНИЦА ЭТАПА 6 -->
+            <div id="stage6" class="stage-page-container stage-page hidden p-8 md:p-12">
+                <div class="confidential-watermark">Этап 6</div>
+                <div class="stage-content max-w-3xl mx-auto">
+                    <h2 class="font-serif text-4xl font-bold text-brand-seal mb-8">▎Этап 6: Открытие частной школы</h2>
+                    
+                    <!-- 
+                      Пользовательский комментарий: 
+                      Вставьте сюда URL-адрес изображения, например, "Здание школы" или "Ключи".
+                      (Например, с GitHub Pages)
+                    -->
+                    <img src="https://placehold.co/600x300/e2e8f0/64748b?text=%D0%97%D0%B4%D0%B0%D0%BD%D0%B8%D0%B5%0A%D0%A8%D0%BA%D0%BE%D0%BB%D1%8B" 
+                         alt="Открытие школы" 
+                         class="w-full h-auto max-h-80 object-cover rounded-md my-6 shadow-lg"
+                         onerror="this.src='https://placehold.co/600x300/e2e8f0/64748b?text=%D0%98%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D0%B5%0A%D0%BD%D0%B5%D0%B4%D0%BE%D1%81%D1%82%D1%83%D0%BF%D0%BD%D0%BE';">
+
+                    <p class="font-bold text-xl text-brand-ink mt-6 mb-3">• Действия:</p>
+                    <p class="pl-6 text-lg text-gray-700">– Регистрация школы и получение лицензий.</p>
+                    <p class="pl-6 text-lg text-gray-700">– Набор команды преподавателей и создание учебной программы.</p>
+                    <p class="pl-6 text-lg text-gray-700">– Проведение маркетинговых мероприятий для привлечения учеников.</p>
+                    
+                    <p class="font-bold text-xl text-brand-ink mt-8 mb-3">• Ресурсы:</p>
+                    <p class="pl-6 text-lg text-gray-700">– Юридические консультации для регистрации учреждения.</p>
+                    <p class="pl-6 text-lg text-gray-700">– Платформы для рекламы и продвижения.</p>
+                </div>
+            </div>
+
+        </div>
+        <!-- === КОНЕЦ КОНТЕЙНЕРА ЭТАПОВ === -->
+
+    </main>
+
+    <!-- === JAVASCRIPT ДЛЯ НАВИГАЦИИ === -->
+    <script>
+        const mainDocket = document.getElementById('main-docket');
+        const stageDetailsContainer = document.getElementById('stage-details-container');
+        const stagePages = document.querySelectorAll('.stage-page');
+
+        function showStage(stageId) {
+            // 1. Скрыть главную страницу
+            mainDocket.classList.add('hidden');
+            
+            // 2. Показать контейнер этапов
+            stageDetailsContainer.classList.remove('hidden');
+            
+            // 3. Скрыть ВСЕ страницы этапов
+            stagePages.forEach(page => {
+                page.classList.add('hidden');
+            });
+            
+            // 4. Показать нужную страницу этапа
+            const activePage = document.getElementById(stageId);
+            if (activePage) {
+                activePage.classList.remove('hidden');
             }
             
-            spookyNoise.triggerAttackRelease("4n");
-            soundMessage.classList.remove('hidden');
-            soundButton.disabled = true;
-
-            setTimeout(() => {
-                soundMessage.classList.add('hidden');
-                soundButton.disabled = false;
-            }, 4000); // Длительность звука
-        });
-
-        // --- Логика для Фишки №3: Подсказка ---
-        const hintButton = document.getElementById('ghostHintButton');
-        const closeHintButton = document.getElementById('closeHint');
-        const hintModal = document.getElementById('hintModal');
-
-        hintButton.addEventListener('click', () => {
-            hintModal.classList.remove('hidden');
-        });
-        closeHintButton.addEventListener('click', () => {
-            hintModal.classList.add('hidden');
-        });
-        hintModal.addEventListener('click', (e) => {
-            if (e.target === hintModal) {
-                hintModal.classList.add('hidden');
-            }
-        });
-
-        // --- Логика для Фишки №4: Квиз ---
-        function checkAnswer(inputId) {
-            const input = document.getElementById(inputId);
-            const userAnswer = input.value.trim().toLowerCase();
-            const correctAnswer = input.dataset.answer.toLowerCase();
-
-            if (userAnswer === correctAnswer) {
-                input.style.borderColor = '#4ade80'; // Зеленый (lime-400)
-                input.style.backgroundColor = '#1c3d2a';
-            } else {
-                input.style.borderColor = '#f87171'; // Красный (red-400)
-                input.style.backgroundColor = '#451a1a';
-            }
+            // 5. Прокрутить вверх
+            window.scrollTo(0, 0);
         }
 
-        // --- Логика для Фишки №5: Отправка ---
-        const submitChallengeButton = document.getElementById('submitChallenge');
-        const submitMessage = document.getElementById('submitMessage');
-        const challengeQuery = document.getElementById('challengeQuery');
-
-        submitChallengeButton.addEventListener('click', () => {
-            if (challengeQuery.value.trim() === "") {
-                submitMessage.textContent = "The spirits can't hear you... speak up!";
-                submitMessage.classList.remove('hidden');
-                submitMessage.classList.remove('text-lime-300');
-                submitMessage.classList.add('text-red-400');
-            } else {
-                submitMessage.textContent = "The spirits are pondering your question... 🦇";
-                submitMessage.classList.remove('hidden');
-                submitMessage.classList.remove('text-red-400');
-                submitMessage.classList.add('text-lime-300');
-                submitChallengeButton.disabled = true;
-                challengeQuery.disabled = true;
-            }
-        });
-
+        function showMainDocket() {
+            // 1. Скрыть контейнер этапов
+            stageDetailsContainer.classList.add('hidden');
+            
+            // 2. Показать главную страницу
+            mainDocket.classList.remove('hidden');
+            
+            // 3. Прокрутить вверх
+            window.scrollTo(0, 0);
+        }
     </script>
+    <!-- === КОНЕЦ JAVASCRIPT === -->
 
 </body>
 </html>
-
