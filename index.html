@@ -3,420 +3,267 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Судебное Дело: Руководитель Образования</title>
-    <!-- Подключение Tailwind CSS -->
+    <title>Урок: Past Continuous</title>
+    <!-- Подключаем Tailwind CSS для быстрой стилизации -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Подключение шрифтов -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Merriweather:wght@400;700;900&display=swap" rel="stylesheet">
-    
-    <script>
-        // Конфигурация Tailwind
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                        serif: ['Merriweather', 'serif'],
-                    },
-                    colors: {
-                        'brand-parchment': '#fdfbf6',
-                        'brand-seal': '#a41e21', // Глубокий красный
-                        'brand-ink': '#2a2a2a', // Темно-серый
-                    }
-                }
-            }
-        }
-    </script>
     <style>
-        /* "Восковая" печать */
-        .seal-effect {
-            position: relative;
-            display: inline-block;
-        }
-        .seal-effect::after {
-            content: '';
-            position: absolute;
-            left: -10px;
-            top: -5px;
-            width: 30px;
-            height: 30px;
-            background-color: #a41e21; /* brand-seal */
-            border-radius: 50%;
-            z-index: -1;
-            opacity: 0.8;
-            filter: blur(2px);
-        }
-
-        /* Водяной знак "Конфиденциально" для страниц этапов */
-        .stage-page-container {
-            position: relative;
-            overflow: hidden; /* Чтобы водяной знак не вылезал */
+        /* Используем приятный шрифт */
+        body {
+            font-family: 'Inter', sans-serif;
+            animation: fadeIn 1s ease-out; /* Анимация появления страницы */
         }
         
-        .confidential-watermark {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) rotate(-30deg);
-            font-size: 6rem; /* 96px */
-            font-weight: 900;
-            color: #ef4444; /* red-500 */
-            opacity: 0.1;
-            z-index: 0;
-            pointer-events: none;
-            font-family: 'Merriweather', serif;
-            text-transform: uppercase;
-            letter-spacing: 0.5em;
+        /* Стили и анимация для часов */
+        .clock {
+            width: 150px;
+            height: 150px;
+            border: 8px solid #3b82f6; /* blue-500 */
+            border-radius: 50%;
+            position: relative;
+            margin: 0 auto;
+            background-color: white;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
 
-        /* Контент на странице этапа должен быть поверх водяного знака */
-        .stage-content {
-            position: relative;
-            z-index: 1;
+        .hand {
+            position: absolute;
+            background-color: #1e3a8a; /* blue-900 */
+            transform-origin: bottom center;
+            border-radius: 4px;
+        }
+
+        /* Часовая стрелка */
+        .hour-hand {
+            width: 6px;
+            height: 45px;
+            top: 30px;
+            left: 50%;
+            margin-left: -3px;
+            transform: rotate(60deg); /* Показывает на 2 */
+        }
+
+        /* Минутная стрелка (анимированная) */
+        .minute-hand {
+            width: 4px;
+            height: 60px;
+            top: 15px;
+            left: 50%;
+            margin-left: -2px;
+            animation: rotateHand 15s linear infinite; /* Анимация вращения */
+        }
+
+        @keyframes rotateHand {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+        
+        /* Анимация для "карточек" урока */
+        .lesson-card {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: slideUp 0.6s ease-out forwards;
+        }
+        
+        /* Задержка анимации для карточек, чтобы они появлялись по очереди */
+        .lesson-card:nth-child(1) { animation-delay: 0.2s; }
+        .lesson-card:nth-child(2) { animation-delay: 0.4s; }
+        .lesson-card:nth-child(3) { animation-delay: 0.6s; }
+        .lesson-card:nth-child(4) { animation-delay: 0.8s; }
+        .lesson-card:nth-child(5) { animation-delay: 1.0s; }
+        .lesson-card:nth-child(6) { animation-delay: 1.2s; }
+
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Скрытие ответов по умолчанию */
+        .answer {
+            display: none;
         }
     </style>
 </head>
-<body class="bg-stone-200 font-sans text-brand-ink p-4 md:p-8">
+<body class="bg-blue-50 text-gray-800">
 
-    <!-- Главный контейнер, стилизованный под "Папку дела" -->
-    <main class="max-w-6xl mx-auto bg-brand-parchment shadow-2xl rounded-lg border-8 border-gray-800 min-h-screen">
-        
-        <!-- === ГЛАВНАЯ СТРАНИЦА (ОБЛОЖКА ДЕЛА) === -->
-        <div id="main-docket">
+    <!-- Контейнер урока -->
+    <div class="max-w-3xl mx-auto p-4 md:p-8 space-y-8">
+
+        <!-- 1. Заголовок и Анимированные Часы -->
+        <header class="text-center p-6 bg-white rounded-xl shadow-lg">
+            <!-- Анимированные часы -->
+            <div class="clock mb-6">
+                <div class="hand hour-hand"></div>
+                <div class="hand minute-hand"></div>
+            </div>
             
-            <!-- === ЗАГОЛОВОК ДЕЛА === -->
-            <header class="text-center p-8 md:p-12 border-b-4 border-gray-800 border-dashed">
-                
-                <!-- Смайлик "Весы правосудия" -->
-                <div class="text-8xl mx-auto mb-6 opacity-80" aria-label="Весы правосудия">⚖️</div>
+            <h1 class="text-4xl font-bold text-blue-900">Past Continuous Tense</h1>
+            <p class="text-xl text-gray-600 mt-2">A moment in time...</p>
+        </header>
 
-                <h1 class="font-serif text-4xl md:text-6xl font-bold text-brand-ink uppercase">
-                    Судебное Дело <span class="text-brand-seal">№ 2030-ED</span>
-                </h1>
-                <p class="font-serif text-xl md:text-3xl text-gray-700 mt-3">
-                    Относительно: "Руководитель частной образовательной организации"
-                </p>
-            </header>
-
-            <!-- === МАТЕРИАЛЫ ДЕЛА (СПИСОК ЭТАПОВ) === -->
-            <section class="p-8 md:p-12">
-                <h2 class="font-serif text-3xl md:text-4xl font-bold text-center mb-10">
-                    <span class="seal-effect">М</span>атериалы Дела
-                </h2>
-                
-                <!-- Сетка кликабельных этапов -->
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    
-                    <!-- Этап 1 -->
-                    <div onclick="showStage('stage1')" class="bg-white p-6 rounded-lg shadow-lg border-2 border-gray-300 hover:shadow-xl hover:border-brand-seal transition-all duration-300 cursor-pointer h-full flex flex-col justify-between">
-                        <h3 class="font-serif text-2xl font-bold text-brand-seal mb-3">▎Этап 1:</h3>
-                        <p class="text-lg font-semibold text-brand-ink">Завершение бакалавриата</p>
-                        <span class="text-sm text-gray-500 mt-4">Нажмите, чтобы открыть материалы...</span>
-                    </div>
-
-                    <!-- Этап 2 -->
-                    <div onclick="showStage('stage2')" class="bg-white p-6 rounded-lg shadow-lg border-2 border-gray-300 hover:shadow-xl hover:border-brand-seal transition-all duration-300 cursor-pointer h-full flex flex-col justify-between">
-                        <h3 class="font-serif text-2xl font-bold text-brand-seal mb-3">▎Этап 2:</h3>
-                        <p class="text-lg font-semibold text-brand-ink">Поступление в магистратуру</p>
-                        <span class="text-sm text-gray-500 mt-4">Нажмите, чтобы открыть материалы...</span>
-                    </div>
-
-                    <!-- Этап 3 -->
-                    <div onclick="showStage('stage3')" class="bg-white p-6 rounded-lg shadow-lg border-2 border-gray-300 hover:shadow-xl hover:border-brand-seal transition-all duration-300 cursor-pointer h-full flex flex-col justify-between">
-                        <h3 class="font-serif text-2xl font-bold text-brand-seal mb-3">▎Этап 3:</h3>
-                        <p class="text-lg font-semibold text-brand-ink">Обучение в магистратуре</p>
-                        <span class="text-sm text-gray-500 mt-4">Нажмите, чтобы открыть материалы...</span>
-                    </div>
-
-                    <!-- Этап 4 -->
-                    <div onclick="showStage('stage4')" class="bg-white p-6 rounded-lg shadow-lg border-2 border-gray-300 hover:shadow-xl hover:border-brand-seal transition-all duration-300 cursor-pointer h-full flex flex-col justify-between">
-                        <h3 class="font-serif text-2xl font-bold text-brand-seal mb-3">▎Этап 4:</h3>
-                        <p class="text-lg font-semibold text-brand-ink">Практика и опыт работы</p>
-                        <span class="text-sm text-gray-500 mt-4">Нажмите, чтобы открыть материалы...</span>
-                    </div>
-
-                    <!-- Этап 5 -->
-                    <div onclick="showStage('stage5')" class="bg-white p-6 rounded-lg shadow-lg border-2 border-gray-300 hover:shadow-xl hover:border-brand-seal transition-all duration-300 cursor-pointer h-full flex flex-col justify-between">
-                        <h3 class="font-serif text-2xl font-bold text-brand-seal mb-3">▎Этап 5:</h3>
-                        <p class="text-lg font-semibold text-brand-ink">Разработка концепции частной школы</p>
-                        <span class="text-sm text-gray-500 mt-4">Нажмите, чтобы открыть материалы...</span>
-                    </div>
-
-                    <!-- Этап 6 -->
-                    <div onclick="showStage('stage6')" class="bg-white p-6 rounded-lg shadow-lg border-2 border-gray-300 hover:shadow-xl hover:border-brand-seal transition-all duration-300 cursor-pointer h-full flex flex-col justify-between">
-                        <h3 class="font-serif text-2xl font-bold text-brand-seal mb-3">▎Этап 6:</h3>
-                        <p class="text-lg font-semibold text-brand-ink">Открытие частной школы</p>
-                        <span class="text-sm text-gray-500 mt-4">Нажмите, чтобы открыть материалы...</span>
-                    </div>
-                </div>
-            </section>
-
-            <!-- === ДОПОЛНИТЕЛЬНЫЕ ВАРИАНТЫ ОБУЧЕНИЯ (Остаются на главной) === -->
-            <section class="p-8 md:p-12 bg-gray-800 text-white mt-8">
-                <h2 class="font-serif text-3xl md:text-4xl font-bold text-center mb-8 text-white">
-                    ▎Дополнительные варианты обучения
-                </h2>
-                <div class="max-w-3xl mx-auto space-y-4">
-                    <details class="bg-gray-700 p-4 rounded-lg block">
-                        <summary class="font-serif font-bold text-lg cursor-pointer">1. Курсы по предпринимательству</summary>
-                        <p class="mt-3 text-gray-300 pl-6">Онлайн-курсы на платформах Coursera, Udemy или специализированные курсы в бизнес-школах.</p>
-                    </details>
-                    <details class="bg-gray-700 p-4 rounded-lg block">
-                        <summary class="font-serif font-bold text-lg cursor-pointer">2. Сертификаты по управлению образованием</summary>
-                        <p class="mt-3 text-gray-300 pl-6">Программы повышения квалификации от университетов или профессиональных ассоциаций.</p>
-                    </details>
-                    <details class="bg-gray-700 p-4 rounded-lg block">
-                        <summary class="font-serif font-bold text-lg cursor-pointer">3. Обучение по психологии</summary>
-                        <p class="mt-3 text-gray-300 pl-6">Курсы по детской психологии или образовательной психологии для более глубокого понимания потребностей учащихся.</p>
-                    </details>
-                </div>
-            </section>
-
-            <!-- === ПРОТОКОЛ КАРЬЕРНОГО РОСТА (Остается на главной) === -->
-            <section class="p-8 md:p-12 bg-white mt-8">
-                <h2 class="font-serif text-3xl md:text-4xl font-bold text-center mb-12">
-                    <span class="seal-effect">П</span>ротокол Карьерного Роста
-                </h2>
-                <div class="relative max-w-2xl mx-auto border-l-4 border-brand-seal pl-10 py-4">
-                    <!-- Записи... -->
-                    <div class="relative mb-10">
-                        <div class="absolute -left-[50px] top-1 w-6 h-6 bg-brand-ink rounded-full border-4 border-white shadow-md"></div>
-                        <h4 class="font-serif text-2xl font-bold">2026:</h4>
-                        <p class="text-lg text-gray-700">Завершение бакалавриата</p>
-                    </div>
-                    <div class="relative mb-10">
-                        <div class="absolute -left-[50px] top-1 w-6 h-6 bg-brand-ink rounded-full border-4 border-white shadow-md"></div>
-                        <h4 class="font-serif text-2xl font-bold">2026-2028:</h4>
-                        <p class="text-lg text-gray-700">Магистратура</p>
-                    </div>
-                    <div class="relative mb-10">
-                        <div class="absolute -left-[50px] top-1 w-6 h-6 bg-brand-ink rounded-full border-4 border-white shadow-md"></div>
-                        <h4 class="font-serif text-2xl font-bold">2028-2029:</h4>
-                        <p class="text-lg text-gray-700">Работа в школе (администратор)</p>
-                    </div>
-                    <div class="relative mb-10">
-                        <div class="absolute -left-[50px] top-1 w-6 h-6 bg-brand-ink rounded-full border-4 border-white shadow-md"></div>
-                        <h4 class="font-serif text-2xl font-bold">2028-2029:</h4>
-                        <p class="text-lg text-gray-700">Разработка концепции школы</p>
-                    </div>
-                    <div class="relative mb-10">
-                        <div class="absolute -left-[50px] top-1 w-6 h-6 bg-brand-ink rounded-full border-4 border-white shadow-md"></div>
-                        <h4 class="font-serif text-2xl font-bold">2029-2030:</h4>
-                        <p class="text-lg text-gray-700">Открытие частной школы</p>
-                    </div>
-                </div>
-            </section>
-
-            <!-- === ВЕРДИКТ (Остается на главной) === -->
-            <footer class="p-10 md:p-16 text-center border-t-4 border-gray-800 border-dashed mt-8 rounded-b-lg">
-                
-                <!-- Смайлик "Судья" (с молотком) -->
-                <div class="text-8xl mx-auto mb-6 opacity-80" aria-label="Судья">🧑‍⚖️</div>
-
-                <h2 class="font-serif text-4xl font-bold text-brand-ink">ВЕРДИКТ</h2>
-                
-                <!-- *** ИСПРАВЛЕНИЕ ЗДЕСЬ *** -->
-                <!-- Вот текст, который вы просили вернуть -->
-                <p class="font-serif text-xl text-gray-700 mt-4 max-w-2xl mx-auto">
-                    На основании представленных доказательств и выполненных процедур,
-                    карьерный путь признается...
-                </p>
-                
-                <p class="font-serif text-5xl font-bold text-brand-seal mt-6 tracking-wider">
-                    УТВЕРЖДЕННЫМ
-                </p>
-                
-                <!-- И нижняя строка, которая тоже пропала -->
-                <p class="mt-8 text-gray-500">&copy; 2025 Высшая Судебная Палата Карьерного Планирования. Дело закрыто.</p>
-
-            </footer>
-        </div>
-        <!-- === КОНЕЦ ГЛАВНОЙ СТРАНИЦЫ === -->
-
-
-        
-        <!-- === КОНТЕЙНЕР ДЛЯ СТРАНИЦ ЭТАПОВ (Скрыт по умолчанию) === -->
-        <div id="stage-details-container" class="hidden">
+        <!-- 2. Раздел: Что это? (Правило) -->
+        <section class="bg-white p-6 rounded-xl shadow-lg lesson-card">
+            <h2 class="text-2xl font-semibold text-blue-800 mb-4">Когда мы используем Past Continuous?</h2>
+            <p class="mb-4">Мы используем Past Continuous, чтобы описать <strong class="text-blue-700">действие, которое длилось (было в процессе)</strong> в <strong class="text-blue-700">конкретный момент</strong> в прошлом.</p>
             
-            <!-- Навигация "Назад" -->
-            <div class="p-6 bg-gray-800 border-b-4 border-gray-900 sticky top-0 z-20">
-                <button onclick="showMainDocket()" class="bg-white text-brand-ink font-bold py-2 px-6 rounded-lg hover:bg-stone-200 transition-colors duration-200 shadow-lg">
-                    &larr; Вернуться к Материалам Дела
+            <p class="font-bold text-lg mb-2">Формула:</p>
+            <div class="bg-blue-100 p-4 rounded-lg text-center text-lg font-medium text-blue-900">
+                was / were + Ving (глагол с -ing)
+            </div>
+            
+            <ul class="list-disc list-inside mt-4 space-y-2">
+                <li>
+                    <strong>I, He, She, It</strong> <span class="font-bold text-blue-700">was</span> reading.
+                </li>
+                <li>
+                    <strong>You, We, They</strong> <span class="font-bold text-blue-700">were</span> reading.
+                </li>
+            </ul>
+
+            <p class="mt-4 text-gray-600">
+                <strong>Пример:</strong> What <span class="text-blue-700">were</span> you <span class="text-blue-700">doing</span> at 7 p.m. yesterday?
+                <br>
+                — I <span class="text-blue-700">was watching</span> TV. (Я был в процессе просмотра телевизора ровно в 7 часов).
+            </p>
+        </section>
+
+        <!-- 3. Блок для Вставки ФОТО из Учебника (Правило) -->
+        <section class="bg-yellow-100 border-l-4 border-yellow-500 p-6 rounded-xl shadow-lg lesson-card">
+            <h2 class="text-2xl font-semibold text-yellow-800 mb-4">Правило из учебника (Spotlight 7)</h2>
+            <p class="text-yellow-700 mb-4">Давайте посмотрим на правило в нашем учебнике. Что нового мы узнали?</p>
+            <div class="w-full bg-gray-200 rounded-lg overflow-hidden h-64 flex items-center justify-center">
+                <!--
+                !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                ⬇️ ВАЖНО: ВСТАВЬТЕ ССЫЛКУ НА ФОТО СТРАНИЦЫ С ПРАВИЛОМ (SPOTLIGHT 7) СЮДА ⬇️
+                
+                Замените ПУТЬ_К_ВАШЕМУ_ИЗОБРАЖЕНИЮ.jpg на прямую ссылку
+                (например, с вашего GitHub Pages).
+                
+                Пример:
+                src="https://ВАШ_ЛОГИН.github.io/images/spotlight-rule.jpg"
+                !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                -->
+                <img src="https://placehold.co/600x400/eeeeee/999999?text=Фото+правила+из+учебника" 
+                     alt="Фото правила из учебника Spotlight 7"
+                     class="w-full h-full object-contain"
+                     onerror="this.src='https://placehold.co/600x400/eeeeee/999999?text=Ошибка+загрузки+фото'; this.alt='Ошибка загрузки изображения. Проверьте ссылку.';">
+            </div>
+        </section>
+
+        <!-- 4. Практика 1: Fill in the gaps -->
+        <section class="bg-white p-6 rounded-xl shadow-lg lesson-card">
+            <h2 class="text-2xl font-semibold text-blue-800 mb-4">Practice 1: Fill in the gaps</h2>
+            <p class="mb-4">Use <strong class="text-blue-700">was</strong>, <strong class="text-blue-700">were</strong> and the <strong class="text-blue-700">-ing</strong> form of the verb.</p>
+            <div class="space-y-4">
+                <!-- Задание 1 -->
+                <p>1. At 8 p.m. last night, I (do) ________ my homework.</p>
+                <button class="show-answer-btn text-sm bg-blue-500 hover:bg-blue-600 text-white py-1 px-3 rounded-full transition duration-200" data-target="answer-1">
+                    Показать ответ
                 </button>
+                <span id="answer-1" class="answer ml-2 p-1 bg-green-100 text-green-800 rounded font-medium">was doing</span>
+
+                <!-- Задание 2 -->
+                <p class="mt-2">2. They (play) ________ football when it started to rain.</p>
+                <button class="show-answer-btn text-sm bg-blue-500 hover:bg-blue-600 text-white py-1 px-3 rounded-full transition duration-200" data-target="answer-2">
+                    Показать ответ
+                </button>
+                <span id="answer-2" class="answer ml-2 p-1 bg-green-100 text-green-800 rounded font-medium">were playing</span>
+
+                <!-- Задание 3 -->
+                <p class="mt-2">3. What (you / watch) ________ at 10 o'clock this morning?</p>
+                <button class="show-answer-btn text-sm bg-blue-500 hover:bg-blue-600 text-white py-1 px-3 rounded-full transition duration-200" data-target="answer-3">
+                    Показать ответ
+                </button>
+                <span id="answer-3" class="answer ml-2 p-1 bg-green-100 text-green-800 rounded font-medium">were you watching</span>
             </div>
+        </section>
+        
+        <!-- 5. Правило 2: Interruption (Прерывание) -->
+        <section class="bg-white p-6 rounded-xl shadow-lg lesson-card">
+            <h2 class="text-2xl font-semibold text-blue-800 mb-4">Past Continuous vs Past Simple</h2>
+            <p class="mb-4">Мы часто используем Past Continuous (длинное действие) вместе с Past Simple (короткое, прерывающее действие).</p>
+            <ul class="list-disc list-inside mt-4 space-y-2">
+                <li>
+                    <strong>While</strong> (пока, в то время как) + <span class="font-bold text-blue-700">Past Continuous</span>.
+                </li>
+                <li>
+                    <strong>When</strong> (когда) + <span class="font-bold text-red-700">Past Simple</span>.
+                </li>
+            </ul>
+            <p class="mt-4 text-gray-600">
+                <strong>Пример:</strong>
+                <br>
+                <span class="text-blue-700">I was reading a book</span> (длинное действие) <strong class="text-red-700">when the phone rang</strong> (короткое действие).
+                <br>
+                <strong class="text-red-700">The phone rang</strong> <span class="font-bold">while</span> <span class="text-blue-700">I was reading a book</span>.
+            </p>
+        </section>
 
-            <!-- 
-              Ниже идут "страницы" для каждого этапа.
-              Они все имеют класс .stage-page и .hidden
-              JavaScript будет показывать нужную.
-            -->
-
-            <!-- СТРАНИЦА ЭТАПА 1 -->
-            <div id="stage1" class="stage-page-container stage-page hidden p-8 md:p-12">
-                <div class="confidential-watermark">Этап 1</div>
-                <div class="stage-content max-w-3xl mx-auto">
-                    <h2 class="font-serif text-4xl font-bold text-brand-seal mb-8">▎Этап 1: Завершение бакалавриата</h2>
-                    
-                    <p class="font-bold text-xl text-brand-ink mt-6 mb-3">• Действия:</p>
-                    <p class="pl-6 text-lg text-gray-700">– Успешно завершить бакалавриат по педагогике.</p>
-                    <p class="pl-6 text-lg text-gray-700">– Участвовать в дополнительных мероприятиях, таких как стажировки в учебных заведениях, волонтерство или работа в образовательных проектах.</p>
-
-                    <p class="font-bold text-xl text-brand-ink mt-8 mb-3">• Ресурсы:</p>
-                    <p class="pl-6 text-lg text-gray-700">– Школы для стажировок.</p>
-                    <p class="pl-6 text-lg text-gray-700">– Профессиональные сообщества.</p>
-                </div>
+        <!-- 6. Блок для Вставки ФОТО из Учебника (Упражнение) -->
+        <section class="bg-green-100 border-l-4 border-green-500 p-6 rounded-xl shadow-lg lesson-card">
+            <h2 class="text-2xl font-semibold text-green-800 mb-4">Упражнение из учебника (Spotlight 7)</h2>
+            <p class="text-green-700 mb-4">А теперь давайте выполним упражнение из нашего учебника на эту тему.</p>
+            <div class="w-full bg-gray-200 rounded-lg overflow-hidden h-64 flex items-center justify-center">
+                <!--
+                !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                ⬇️ ВАЖНО: ВСТАВЬТЕ ССЫЛКУ НА ФОТО СТРАНИЦЫ С УПРАЖНЕНИЕМ СЮДА ⬇️
+                
+                Замените ПУТЬ_К_ВАШЕМУ_УПРАЖНЕНИЮ.jpg на прямую ссылку
+                (например, с вашего GitHub Pages).
+                
+                Пример:
+                src="https://ВАШ_ЛОГИН.github.io/images/spotlight-ex5.jpg"
+                !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                -->
+                <img src="https://placehold.co/600x400/eeeeee/999999?text=Фото+упражнения+из+учебника" 
+                     alt="Фото упражнения из учебника Spotlight 7"
+                     class="w-full h-full object-contain"
+                     onerror="this.src='https://placehold.co/600x400/eeeeee/999999?text=Ошибка+загрузки+фото'; this.alt='Ошибка загрузки изображения. Проверьте ссылку.';">
             </div>
-            
-            <!-- СТРАНИЦА ЭТАПА 2 -->
-            <div id="stage2" class="stage-page-container stage-page hidden p-8 md:p-12">
-                <div class="confidential-watermark">Этап 2</div>
-                <div class="stage-content max-w-3xl mx-auto">
-                    <h2 class="font-serif text-4xl font-bold text-brand-seal mb-8">▎Этап 2: Поступление в магистратуру</h2>
-                    
-                    <p class="font-bold text-xl text-brand-ink mt-6 mb-3">• Действия:</p>
-                    <p class="pl-6 text-lg text-gray-700">– Выбор магистратуры с фокусом на образовательное управление, педагогическую психологию или управление образовательными учреждениями.</p>
-                    <p class="pl-6 text-lg text-gray-700">– Подготовка к вступительным экзаменам (если необходимо) и подача документов.</p>
-                    
-                    <p class="font-bold text-xl text-brand-ink mt-8 mb-3">• Ресурсы:</p>
-                    <p class="pl-6 text-lg text-gray-700">– ВУЗы, предлагающие магистерские программы (например, МГПУ, МПГУ, МИРЭА и т.д).</p>
-                    <p class="pl-6 text-lg text-gray-700">– Курсы подготовки к экзаменам (если это требуется).</p>
-                </div>
-            </div>
+        </section>
 
-            <!-- СТРАНИЦА ЭТАПА 3 -->
-            <div id="stage3" class="stage-page-container stage-page hidden p-8 md:p-12">
-                <div class="confidential-watermark">Этап 3</div>
-                <div class="stage-content max-w-3xl mx-auto">
-                    <h2 class="font-serif text-4xl font-bold text-brand-seal mb-8">▎Этап 3: Обучение в магистратуре</h2>
-                    
-                    <p class="font-bold text-xl text-brand-ink mt-6 mb-3">• Действия:</p>
-                    <p class="pl-6 text-lg text-gray-700">– Изучение курсов по управлению, финансам, педагогике и правовым аспектам образования.</p>
-                    <p class="pl-6 text-lg text-gray-700">– Участие в проектах и стажировках в образовательных учреждениях.</p>
-                    <p class="pl-6 text-lg text-gray-700">– Налаживание контактов с профессионалами в области образования.</p>
-                    
-                    <p class="font-bold text-xl text-brand-ink mt-8 mb-3">• Ресурсы:</p>
-                    <p class="pl-6 text-lg text-gray-700">– Лекции и семинары от профессионалов.</p>
-                    <p class="pl-6 text-lg text-gray-700">– Вебинары и конференции по образовательному менеджменту.</p>
-                </div>
-            </div>
-            
-            <!-- СТРАНИЦА ЭТАПА 4 -->
-            <div id="stage4" class="stage-page-container stage-page hidden p-8 md:p-12">
-                <div class="confidential-watermark">Этап 4</div>
-                <div class="stage-content max-w-3xl mx-auto">
-                    <h2 class="font-serif text-4xl font-bold text-brand-seal mb-8">▎Этап 4: Практика и опыт работы</h2>
-                    
-                    <p class="font-bold text-xl text-brand-ink mt-6 mb-3">• Действия:</p>
-                    <p class="pl-6 text-lg text-gray-700">– Поиск работы в качестве администратора или заместителя директора в школе или другом образовательном учреждении.</p>
-                    <p class="pl-6 text-lg text-gray-700">– Получение опыта в управлении командой и организации учебного процесса.</p>
-                    
-                    <p class="font-bold text-xl text-brand-ink mt-8 mb-3">• Ресурсы:</p>
-                    <p class="pl-6 text-lg text-gray-700">– Профессиональные ассоциации (например, Ассоциация частных школ).</p>
-                    <p class="pl-6 text-lg text-gray-700">– Менторство от опытных руководителей образовательных учреждений.</p>
-                </div>
-            </div>
+    </div>
 
-            <!-- СТРАНИЦА ЭТАПА 5 -->
-            <div id="stage5" class="stage-page-container stage-page hidden p-8 md:p-12">
-                <div class="confidential-watermark">Этап 5</div>
-                <div class="stage-content max-w-3xl mx-auto">
-                    <h2 class="font-serif text-4xl font-bold text-brand-seal mb-8">▎Этап 5: Разработка концепции частной школы</h2>
-                    
-                    <!-- 
-                      Пользовательский комментарий: 
-                      Вставьте сюда URL-адрес изображения, например, "Чертеж" или "Бизнес-план".
-                      (Например, с GitHub Pages)
-                    -->
-                    <img src="https://placehold.co/600x300/e2e8f0/64748b?text=%D0%A7%D0%B5%D1%80%D1%82%D0%B5%D0%B6%0A%D0%9A%D0%BE%D0%BD%D1%86%D0%B5%D0%BF%D1%86%D0%B8%D0%B8" 
-                         alt="Разработка концепции" 
-                         class="w-full h-auto max-h-80 object-cover rounded-md my-6 shadow-lg"
-                         onerror="this.src='https://placehold.co/600x300/e2e8f0/64748b?text=%D0%98%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D0%B5%0A%D0%BD%D0%B5%D0%B4%D0%BE%D1%81%D1%82%D1%83%D0%BF%D0%BD%D0%BE';">
-
-                    <p class="font-bold text-xl text-brand-ink mt-6 mb-3">• Действия:</p>
-                    <p class="pl-6 text-lg text-gray-700">– Исследование рынка и потребностей родителей/учеников.</p>
-                    <p class="pl-6 text-lg text-gray-700">– Разработка концепции и бизнес-плана для своей школы.</p>
-                    <p class="pl-6 text-lg text-gray-700">– Поиск инвесторов или источников финансирования.</p>
-                    
-                    <p class="font-bold text-xl text-brand-ink mt-8 mb-3">• Ресурсы:</p>
-                    <p class="pl-6 text-lg text-gray-700">– Курсы по предпринимательству и управлению проектами.</p>
-                    <p class="pl-6 text-lg text-gray-700">– Консультации с экспертами в области образования и бизнеса.</p>
-                </div>
-            </div>
-
-            <!-- СТРАНИЦА ЭТАПА 6 -->
-            <div id="stage6" class="stage-page-container stage-page hidden p-8 md:p-12">
-                <div class="confidential-watermark">Этап 6</div>
-                <div class="stage-content max-w-3xl mx-auto">
-                    <h2 class="font-serif text-4xl font-bold text-brand-seal mb-8">▎Этап 6: Открытие частной школы</h2>
-                    
-                    <!-- 
-                      Пользовательский комментарий: 
-                      Вставьте сюда URL-адрес изображения, например, "Здание школы" или "Ключи".
-                      (Например, с GitHub Pages)
-                    -->
-                    <img src="https://placehold.co/600x300/e2e8f0/64748b?text=%D0%97%D0%B4%D0%B0%D0%BD%D0%B8%D0%B5%0A%D0%A8%D0%BA%D0%BE%D0%BB%D1%8B" 
-                         alt="Открытие школы" 
-                         class="w-full h-auto max-h-80 object-cover rounded-md my-6 shadow-lg"
-                         onerror="this.src='https://placehold.co/600x300/e2e8f0/64748b?text=%D0%98%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D0%B5%0A%D0%BD%D0%B5%D0%B4%D0%BE%D1%81%D1%82%D1%83%D0%BF%D0%BD%D0%BE';">
-
-                    <p class="font-bold text-xl text-brand-ink mt-6 mb-3">• Действия:</p>
-                    <p class="pl-6 text-lg text-gray-700">– Регистрация школы и получение лицензий.</p>
-                    <p class="pl-6 text-lg text-gray-700">– Набор команды преподавателей и создание учебной программы.</p>
-                    <p class="pl-6 text-lg text-gray-700">– Проведение маркетинговых мероприятий для привлечения учеников.</p>
-                    
-                    <p class="font-bold text-xl text-brand-ink mt-8 mb-3">• Ресурсы:</p>
-                    <p class="pl-6 text-lg text-gray-700">– Юридические консультации для регистрации учреждения.</p>
-                    <p class="pl-6 text-lg text-gray-700">– Платформы для рекламы и продвижения.</p>
-                </div>
-            </div>
-
-        </div>
-        <!-- === КОНЕЦ КОНТЕЙНЕРА ЭТАПОВ === -->
-
-    </main>
-
-    <!-- === JAVASCRIPT ДЛЯ НАВИГАЦИИ === -->
     <script>
-        const mainDocket = document.getElementById('main-docket');
-        const stageDetailsContainer = document.getElementById('stage-details-container');
-        const stagePages = document.querySelectorAll('.stage-page');
-
-        function showStage(stageId) {
-            // 1. Скрыть главную страницу
-            mainDocket.classList.add('hidden');
+        // Простой скрипт для кнопок "Показать ответ"
+        document.addEventListener('DOMContentLoaded', () => {
+            const buttons = document.querySelectorAll('.show-answer-btn');
             
-            // 2. Показать контейнер этапов
-            stageDetailsContainer.classList.remove('hidden');
-            
-            // 3. Скрыть ВСЕ страницы этапов
-            stagePages.forEach(page => {
-                page.classList.add('hidden');
+            buttons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const targetId = button.getAttribute('data-target');
+                    const answerElement = document.getElementById(targetId);
+                    
+                    if (answerElement) {
+                        // Показываем или скрываем ответ
+                        if (answerElement.style.display === 'inline') {
+                            answerElement.style.display = 'none';
+                            button.textContent = 'Показать ответ';
+                        } else {
+                            answerElement.style.display = 'inline';
+                            button.textContent = 'Скрыть ответ';
+                        }
+                    }
+                });
             });
-            
-            // 4. Показать нужную страницу этапа
-            const activePage = document.getElementById(stageId);
-            if (activePage) {
-                activePage.classList.remove('hidden');
-            }
-            
-            // 5. Прокрутить вверх
-            window.scrollTo(0, 0);
-        }
-
-        function showMainDocket() {
-            // 1. Скрыть контейнер этапов
-            stageDetailsContainer.classList.add('hidden');
-            
-            // 2. Показать главную страницу
-            mainDocket.classList.remove('hidden');
-            
-            // 3. Прокрутить вверх
-            window.scrollTo(0, 0);
-        }
+        });
     </script>
-    <!-- === КОНЕЦ JAVASCRIPT === -->
 
 </body>
 </html>
+
